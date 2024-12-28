@@ -4,8 +4,12 @@ import { hash } from 'bcryptjs';
 import { AuthError } from 'next-auth';
 import { z } from 'zod';
 import { signUpSchema } from '~/schemas';
-import { signIn } from '~/server/auth';
+import { signIn, signOut } from '~/server/auth';
 import { db } from '~/server/db';
+
+const logout = async () => {
+	await signOut();
+};
 
 const register = async (prevState: string | undefined, formData: FormData) => {
 	try {
@@ -55,4 +59,4 @@ const login = async (prevState: string | undefined, formData: FormData) => {
 	}
 };
 
-export { login, register };
+export { login, logout, register };
