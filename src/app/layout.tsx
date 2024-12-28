@@ -6,7 +6,7 @@ import { type Metadata } from 'next';
 export const metadata: Metadata = {
 	title: 'Artifex',
 	description: 'Artifex',
-	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+	icons: [{ rel: 'icon', url: '/artifex-logo.ico' }],
 };
 
 const inter = Inter({
