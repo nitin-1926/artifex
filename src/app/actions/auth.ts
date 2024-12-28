@@ -1,9 +1,10 @@
 'use server';
 
 import { hash } from 'bcryptjs';
-import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
 import { z } from 'zod';
 import { signUpSchema } from '~/schemas';
+import { signIn } from '~/server/auth';
 import { db } from '~/server/db';
 
 const register = async (prevState: string | undefined, formData: FormData) => {
@@ -36,7 +37,22 @@ const register = async (prevState: string | undefined, formData: FormData) => {
 		}
 		return 'Email or password is invalid';
 	}
-	redirect('/signin');
 };
 
-export { register };
+const login = async (prevState: string | undefined, formData: FormData) => {
+	try {
+		await signIn('credentials', formData);
+	} catch (error) {
+		if (error instanceof AuthError) {
+			switch (error.type) {
+				case 'CredentialsSignin':
+					return 'Invalid credentials';
+				default:
+					return 'Something went wrong';
+			}
+		}
+		throw error;
+	}
+};
+
+export { login, register };

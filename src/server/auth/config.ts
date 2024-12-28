@@ -34,7 +34,6 @@ declare module 'next-auth' {
 export const authConfig = {
 	providers: [
 		Credentials({
-			name: 'Credentials',
 			credentials: {
 				email: { label: 'Email', type: 'text', placeholder: 'jsmith@gmail.com' },
 				password: { label: 'Password', type: 'password' },
@@ -57,7 +56,6 @@ export const authConfig = {
 					}
 					return user;
 				} catch (error) {
-					console.error(error);
 					return null;
 				}
 			},
