@@ -1,3 +1,4 @@
+import Canvas from '~/components/canvas/Canvas';
 import Room from '~/components/liveblocks/Room';
 import { auth } from '~/server/auth';
 
@@ -11,7 +12,7 @@ const DashboardIdPage = async ({ params }: { params: Props }) => {
 
 	return (
 		<Room roomId={`room:${id}`}>
-			<p>Hello</p>
+			<Canvas />
 		</Room>
 	);
 };
