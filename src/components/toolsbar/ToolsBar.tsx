@@ -1,4 +1,5 @@
 import { CanvasMode, LayerType, type CanvasStates } from '~/types';
+import PencilButton from './PencilButton';
 import SelectionButton from './SelectionButton';
 import ShapeSelectionButton from './ShapeSelectionButton';
 import ZoomInButton from './ZoomInButton';
@@ -40,6 +41,12 @@ const ToolsBar = ({
 					}
 					canvasStates={canvasStates}
 					onClick={layerType => setCanvasStates({ mode: CanvasMode.Inserting, layerType })}
+				/>
+				<PencilButton
+					isActive={canvasStates.mode === CanvasMode.Pencil}
+					onClick={() => {
+						setCanvasStates({ mode: CanvasMode.Pencil });
+					}}
 				/>
 				<div className="self-stretch">
 					<div className="flex items-center justify-center">
