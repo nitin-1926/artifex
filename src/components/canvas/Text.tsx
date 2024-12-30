@@ -60,6 +60,7 @@ const Text = ({
 			onDoubleClick={handleDoubleClick}
 			onPointerDown={e => isEditing && e.stopPropagation()}
 			onPointerUp={e => isEditing && e.stopPropagation()}
+			className="group"
 		>
 			{isEditing ? (
 				<foreignObject
@@ -88,19 +89,33 @@ const Text = ({
 					/>
 				</foreignObject>
 			) : (
-				<text
-					x={x}
-					y={y + fontSize}
-					fontSize={fontSize}
-					fontFamily={fontFamily}
-					fontWeight={fontWeight}
-					fill={fill ? rgbToHex(fill) : '#ccc'}
-					stroke={stroke ? rgbToHex(stroke) : '#ccc'}
-					opacity={`${opacity ?? 100}%`}
-					onPointerDown={e => onLayerClick(e, id)}
-				>
-					{text}
-				</text>
+				<>
+					{/* Hover Border */}
+					<rect
+						className="pointer-events-none opacity-0 group-hover:opacity-100"
+						style={{ transform: `translate(${x}px, ${y}px)` }}
+						width={width}
+						height={height}
+						fill="none"
+						strokeWidth={2}
+						stroke={'#0b99ff'}
+					/>
+
+					{/* Main Rectangle */}
+					<text
+						x={x}
+						y={y + fontSize}
+						fontSize={fontSize}
+						fontFamily={fontFamily}
+						fontWeight={fontWeight}
+						fill={fill ? rgbToHex(fill) : '#ccc'}
+						stroke={stroke ? rgbToHex(stroke) : '#ccc'}
+						opacity={`${opacity ?? 100}%`}
+						onPointerDown={e => onLayerClick(e, id)}
+					>
+						{text}
+					</text>
+				</>
 			)}
 		</g>
 	);
