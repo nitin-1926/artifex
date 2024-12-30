@@ -1,6 +1,7 @@
 import { useStorage } from '@liveblocks/react';
 import { memo } from 'react';
 import { LayerType } from '~/types';
+import Ellipse from './Ellipse';
 import Rectangle from './Rectangle';
 
 const LayerComponent = memo(({ id }: { id: string }) => {
@@ -10,6 +11,8 @@ const LayerComponent = memo(({ id }: { id: string }) => {
 	switch (layer.type) {
 		case LayerType.Rectangle:
 			return <Rectangle id={id} layer={layer} />;
+		case LayerType.Ellipse:
+			return <Ellipse id={id} layer={layer} />;
 		default:
 			return null;
 	}
