@@ -2,6 +2,7 @@ import { CanvasMode, LayerType, type CanvasStates } from '~/types';
 import PencilButton from './PencilButton';
 import SelectionButton from './SelectionButton';
 import ShapeSelectionButton from './ShapeSelectionButton';
+import TextButton from './TextButton';
 import ZoomInButton from './ZoomInButton';
 import ZoomOutButton from './ZoomOutButton';
 
@@ -46,6 +47,12 @@ const ToolsBar = ({
 					isActive={canvasStates.mode === CanvasMode.Pencil}
 					onClick={() => {
 						setCanvasStates({ mode: CanvasMode.Pencil });
+					}}
+				/>
+				<TextButton
+					isActive={canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Text}
+					onClick={() => {
+						setCanvasStates({ mode: CanvasMode.Inserting, layerType: LayerType.Text });
 					}}
 				/>
 				<div className="self-stretch">
