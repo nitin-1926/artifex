@@ -3,7 +3,7 @@
 import { LiveObject } from '@liveblocks/client';
 import { useMutation, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
 	type Camera,
 	CanvasMode,
@@ -25,6 +25,7 @@ const Canvas = () => {
 	const layerIds = useStorage(storage => storage.layerIds);
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
+	const [isDragging, setIsDragging] = useState(false);
 
 	const insertLayer = useMutation(
 		(
@@ -80,12 +81,49 @@ const Canvas = () => {
 			const point = pointerEventToCanvasPoint(e, camera);
 			if (canvasStates.mode === CanvasMode.None) {
 				return;
-			}
-			if (canvasStates.mode === CanvasMode.Inserting) {
+			} else if (canvasStates.mode === CanvasMode.Inserting) {
 				insertLayer(canvasStates.layerType, point);
+			} else if (canvasStates.mode === CanvasMode.Dragging) {
+				setCanvasStates({ mode: CanvasMode.Dragging, origin: null });
 			}
+			setIsDragging(false);
 		},
 		[canvasStates, insertLayer],
+	);
+
+	const handleWheel = useCallback((e: React.WheelEvent) => {
+		setCamera(prevCamera => ({
+			...prevCamera,
+			x: prevCamera.x - e.deltaX,
+			y: prevCamera.y - e.deltaY,
+		}));
+	}, []);
+
+	const handlePointerDown = useMutation(
+		({ storage }, e: React.PointerEvent) => {
+			const point = pointerEventToCanvasPoint(e, camera);
+			if (canvasStates.mode === CanvasMode.Dragging) {
+				setCanvasStates({ mode: CanvasMode.Dragging, origin: point });
+				setIsDragging(true);
+			}
+		},
+		[camera, canvasStates.mode, setCanvasStates],
+	);
+
+	const handlePointerMove = useMutation(
+		({ storage }, e: React.PointerEvent) => {
+			const point = pointerEventToCanvasPoint(e, camera);
+			if (canvasStates.mode === CanvasMode.Dragging && canvasStates.origin !== null) {
+				const deltaX = e.movementX;
+				const deltaY = e.movementY;
+				setCamera(prevCamera => ({
+					...prevCamera,
+					x: prevCamera.x + deltaX,
+					y: prevCamera.y + deltaY,
+				}));
+			}
+		},
+		[camera, canvasStates, setCanvasStates],
 	);
 
 	return (
@@ -93,8 +131,21 @@ const Canvas = () => {
 			<main className="overflow-y-auto fixed left-0 right-0 h-screen">
 				<div
 					style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
-					className="h-full w-full touch-none"
+					className={`h-full w-full touch-none ${
+						canvasStates.mode === CanvasMode.None
+							? 'cursor-default'
+							: canvasStates.mode === CanvasMode.Dragging && isDragging
+								? 'cursor-grabbing'
+								: 'cursor-grab'
+					}`}
 				>
+					<svg
+						onWheel={handleWheel}
+						onPointerUp={handlePointerUp}
+						onPointerDown={handlePointerDown}
+						onPointerMove={handlePointerMove}
+						className="h-full w-full"
+					>
 						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
 							{layerIds?.map(layerId => <LayerComponent key={layerId} id={layerId} />)}
 						</g>
