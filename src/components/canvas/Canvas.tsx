@@ -23,8 +23,8 @@ const MAX_LAYERS = 100;
 const Canvas = () => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
-	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
+	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 
 	const insertLayer = useMutation(
 		(
@@ -95,12 +95,24 @@ const Canvas = () => {
 					style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
 					className="h-full w-full touch-none"
 				>
-					<svg onPointerUp={handlePointerUp} className="h-full w-full">
-						<g>{layerIds?.map(layerId => <LayerComponent key={layerId} id={layerId} />)}</g>
+						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
+							{layerIds?.map(layerId => <LayerComponent key={layerId} id={layerId} />)}
+						</g>
 					</svg>
 				</div>
 			</main>
-			<ToolsBar canvasStates={canvasStates} setCanvasStates={newState => setCanvasStates(newState)} />
+			<ToolsBar
+				canvasStates={canvasStates}
+				setCanvasStates={newState => setCanvasStates(newState)}
+				zoomIn={() => {
+					setCamera(prevCamera => ({ ...prevCamera, zoom: prevCamera.zoom + 0.1 }));
+				}}
+				zoomOut={() => {
+					setCamera(prevCamera => ({ ...prevCamera, zoom: prevCamera.zoom - 0.1 }));
+				}}
+				canZoomIn={camera.zoom < 2}
+				canZoomOut={camera.zoom > 0.5}
+			/>
 		</div>
 	);
 };
