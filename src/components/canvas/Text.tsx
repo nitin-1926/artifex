@@ -3,7 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import { type TextLayer } from '~/types';
 import { rgbToHex } from '~/utils';
 
-const Text = ({ id, layer }: { id: string; layer: TextLayer }) => {
+const Text = ({
+	id,
+	layer,
+	onLayerClick,
+}: {
+	id: string;
+	layer: TextLayer;
+	onLayerClick: (e: React.PointerEvent, layerId: string) => void;
+}) => {
 	const { x, y, width, height, text, fontSize, fontFamily, fontWeight, fill, stroke, opacity } = layer;
 
 	const [isEditing, setIsEditing] = useState(false);
@@ -89,6 +97,7 @@ const Text = ({ id, layer }: { id: string; layer: TextLayer }) => {
 					fill={fill ? rgbToHex(fill) : '#ccc'}
 					stroke={stroke ? rgbToHex(stroke) : '#ccc'}
 					opacity={`${opacity ?? 100}%`}
+					onPointerDown={e => onLayerClick(e, id)}
 				>
 					{text}
 				</text>
