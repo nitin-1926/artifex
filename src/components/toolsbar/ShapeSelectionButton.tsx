@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { BiChevronDown } from 'react-icons/bi';
+import { IoEllipseOutline, IoSquareOutline } from 'react-icons/io5';
 import { CanvasMode, type CanvasStates, LayerType } from '~/types';
 import IconButton from './IconButton';
-import { IoEllipseOutline, IoSquareOutline } from 'react-icons/io5';
-import { BiChevronDown } from 'react-icons/bi';
 
 const ShapeSelectionButton = ({
 	isActive,
@@ -38,9 +38,10 @@ const ShapeSelectionButton = ({
 		<div className="relative flex" ref={menuRef}>
 			<IconButton onClick={() => onClick(LayerType.Rectangle)} isActive={isActive} disabled={false}>
 				{canvasStates.mode !== CanvasMode.Inserting && <IoSquareOutline className="h-5 w-5" />}
-				{canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Rectangle && (
-					<IoSquareOutline className="h-5 w-5" />
-				)}
+				{canvasStates.mode === CanvasMode.Inserting &&
+					(canvasStates.layerType === LayerType.Rectangle || canvasStates.layerType === LayerType.Text) && (
+						<IoSquareOutline className="h-5 w-5" />
+					)}
 				{canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Ellipse && (
 					<IoEllipseOutline className="h-5 w-5" />
 				)}
