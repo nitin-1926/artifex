@@ -187,6 +187,27 @@ const Canvas = () => {
 		}
 	}, []);
 
+	const translateSelectedLayer = useMutation(
+		({ storage, self }, point: Point) => {
+			if (canvasStates.mode !== CanvasMode.Translating) return;
+			const offset = {
+				x: point.x - canvasStates.current.x,
+				y: point.y - canvasStates.current.y,
+			};
+			const liveLayers = storage.get('layers');
+			if (self.presence.selection.length > 0) {
+				for (const layerId of self.presence.selection) {
+					const layer = liveLayers.get(layerId);
+					if (layer) {
+						layer.update({ x: layer.get('x') + offset.x, y: layer.get('y') + offset.y });
+					}
+				}
+			}
+			setCanvasStates({ mode: CanvasMode.Translating, current: point });
+		},
+		[canvasStates, setCanvasStates],
+	);
+
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
@@ -246,9 +267,11 @@ const Canvas = () => {
 				continueDrawing(point, e);
 			} else if (canvasStates.mode === CanvasMode.Resizing) {
 				resizeSelectedLayer(point);
+			} else if (canvasStates.mode === CanvasMode.Translating) {
+				translateSelectedLayer(point);
 			}
 		},
-		[camera, canvasStates, setCamera, continueDrawing, resizeSelectedLayer],
+		[camera, canvasStates, setCamera, continueDrawing, resizeSelectedLayer, translateSelectedLayer],
 	);
 
 	const getCursor = () => {
