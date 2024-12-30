@@ -1,7 +1,7 @@
 'use client';
 
 import { LiveObject } from '@liveblocks/client';
-import { useMutation, useMyPresence, useSelf, useStorage } from '@liveblocks/react';
+import { useCanRedo, useCanUndo, useHistory, useMutation, useSelf, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import { useCallback, useState } from 'react';
 import {
@@ -30,7 +30,9 @@ const Canvas = () => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
 	const pencilDraft = useSelf(self => self.presence.pencilDraft);
-	const presence = useMyPresence();
+	const history = useHistory();
+	const canUndo = useCanUndo();
+	const canRedo = useCanRedo();
 
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
@@ -120,7 +122,7 @@ const Canvas = () => {
 			const liveLayerIds = storage.get('layerIds');
 			liveLayerIds.push(pathId);
 
-			setMyPresence({ selection: [pathId], pencilDraft: null }, { addToHistory: true });
+			setMyPresence({ pencilDraft: null });
 			setCanvasStates({ mode: CanvasMode.Pencil });
 		},
 		[setCanvasStates],
@@ -128,9 +130,10 @@ const Canvas = () => {
 
 	const handleResize = useCallback(
 		(corner: Side, initialBounds: XYWH) => {
+			history.pause();
 			setCanvasStates({ mode: CanvasMode.Resizing, initialBounds, corner });
 		},
-		[setCanvasStates],
+		[setCanvasStates, history],
 	);
 
 	const resizeSelectedLayer = useMutation(
@@ -172,18 +175,19 @@ const Canvas = () => {
 	const handleLayerSelection = useMutation(
 		({ self, setMyPresence }, e: React.PointerEvent, layerId: string) => {
 			if (canvasStates.mode === CanvasMode.Pencil || canvasStates.mode === CanvasMode.Inserting) return;
+			history.pause();
 			e.stopPropagation();
 			if (!self.presence.selection.includes(layerId)) {
 				setMyPresence({ selection: [layerId] });
 			}
 			setCanvasStates({ mode: CanvasMode.Translating, current: pointerEventToCanvasPoint(e, camera) });
 		},
-		[camera, canvasStates.mode, setCanvasStates],
+		[camera, canvasStates.mode, setCanvasStates, history],
 	);
 
 	const unselectLayers = useMutation(({ self, setMyPresence }) => {
 		if (self.presence.selection.length > 0) {
-			setMyPresence({ selection: [] });
+			setMyPresence({ selection: [] }, { addToHistory: true });
 		}
 	}, []);
 
@@ -224,8 +228,9 @@ const Canvas = () => {
 				setCanvasStates({ mode: CanvasMode.None });
 			}
 			setIsDragging(false);
+			history.resume();
 		},
-		[camera, canvasStates, insertLayer, setCanvasStates, insertPath, setIsDragging, unselectLayers],
+		[camera, canvasStates, insertLayer, setCanvasStates, insertPath, setIsDragging, unselectLayers, history],
 	);
 
 	const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -334,6 +339,14 @@ const Canvas = () => {
 				}}
 				canZoomIn={camera.zoom < 2}
 				canZoomOut={camera.zoom > 0.5}
+				undo={() => {
+					history.undo();
+				}}
+				redo={() => {
+					history.redo();
+				}}
+				canUndo={canUndo}
+				canRedo={canRedo}
 			/>
 		</div>
 	);

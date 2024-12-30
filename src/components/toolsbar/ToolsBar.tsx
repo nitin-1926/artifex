@@ -15,6 +15,10 @@ const ToolsBar = ({
 	zoomOut,
 	canZoomIn,
 	canZoomOut,
+	undo,
+	redo,
+	canUndo,
+	canRedo,
 }: {
 	canvasStates: CanvasStates;
 	setCanvasStates: (newState: CanvasStates) => void;
@@ -22,6 +26,10 @@ const ToolsBar = ({
 	zoomOut: () => void;
 	canZoomIn: boolean;
 	canZoomOut: boolean;
+	undo: () => void;
+	redo: () => void;
+	canUndo: boolean;
+	canRedo: boolean;
 }) => {
 	return (
 		<div className="fixed bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center justify-center rounded-lg bg-white p-2 shadow-[0_0_3px_rgba(0,0,0,0.18)]">
@@ -59,8 +67,8 @@ const ToolsBar = ({
 				/>
 				<div className="w-[1px] self-stretch bg-black/10" />
 				<div className="flex items-center justify-center">
-					<UndoButton onClick={zoomIn} disabled={!canZoomIn} />
-					<RedoButton onClick={zoomOut} disabled={!canZoomOut} />
+					<UndoButton onClick={undo} disabled={!canUndo} />
+					<RedoButton onClick={redo} disabled={!canRedo} />
 				</div>
 				<div className="w-[1px] self-stretch bg-black/10" />
 				<div className="flex items-center justify-center">
