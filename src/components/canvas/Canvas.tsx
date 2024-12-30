@@ -1,7 +1,7 @@
 'use client';
 
 import { LiveObject } from '@liveblocks/client';
-import { useMutation, useSelf, useStorage } from '@liveblocks/react';
+import { useMutation, useMyPresence, useSelf, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import { useCallback, useState } from 'react';
 import {
@@ -20,6 +20,7 @@ import { penPointsToPathLayer, pointerEventToCanvasPoint, rgbToHex } from '~/uti
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
+import SelectionBox from './SelectionBox';
 
 const MAX_LAYERS = 100;
 
@@ -27,6 +28,8 @@ const Canvas = () => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
 	const pencilDraft = useSelf(self => self.presence.pencilDraft);
+	const presence = useMyPresence();
+
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 	const [isDragging, setIsDragging] = useState(false);
@@ -142,6 +145,17 @@ const Canvas = () => {
 		[canvasStates.mode],
 	);
 
+	const handleLayerSelection = useMutation(
+		({ self, setMyPresence }, e: React.PointerEvent, layerId: string) => {
+			if (canvasStates.mode === CanvasMode.Pencil || canvasStates.mode === CanvasMode.Inserting) return;
+			e.stopPropagation();
+			if (!self.presence.selection.includes(layerId)) {
+				setMyPresence({ selection: [layerId] });
+			}
+		},
+		[canvasStates.mode],
+	);
+
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
@@ -229,21 +243,24 @@ const Canvas = () => {
 						className="h-full w-full"
 					>
 						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
-							{layerIds?.map(layerId => <LayerComponent key={layerId} id={layerId} />)}
+							{layerIds?.map(layerId => (
+								<LayerComponent key={layerId} id={layerId} onLayerClick={handleLayerSelection} />
+							))}
+							<SelectionBox />
+							{pencilDraft !== null && pencilDraft.length > 0 && (
+								<PathLayerComponent
+									x={0}
+									y={0}
+									fill={{
+										r: 217,
+										g: 217,
+										b: 217,
+									}}
+									opacity={100}
+									points={pencilDraft}
+								/>
+							)}
 						</g>
-						{pencilDraft !== null && pencilDraft.length > 0 && (
-							<PathLayerComponent
-								x={0}
-								y={0}
-								fill={{
-									r: 217,
-									g: 217,
-									b: 217,
-								}}
-								opacity={100}
-								points={pencilDraft}
-							/>
-						)}
 					</svg>
 				</div>
 			</main>
