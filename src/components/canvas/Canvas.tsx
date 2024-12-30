@@ -4,8 +4,18 @@ import { LiveObject } from '@liveblocks/client';
 import { useMutation, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { type Camera, type Layer, LayerType, type Point, type RectangleLayer } from '~/types';
+import {
+	type Camera,
+	CanvasMode,
+	type CanvasStates,
+	type EllipseLayer,
+	type Layer,
+	LayerType,
+	type Point,
+	type RectangleLayer,
+} from '~/types';
 import { pointerEventToCanvasPoint, rgbToHex } from '~/utils';
+import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 
 const MAX_LAYERS = 100;
@@ -14,6 +24,7 @@ const Canvas = () => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
+	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 
 	const insertLayer = useMutation(
 		(
@@ -41,6 +52,17 @@ const Canvas = () => {
 					stroke: { r: 217, g: 217, b: 217 },
 					opacity: 100,
 				});
+			} else if (layerType === LayerType.Ellipse) {
+				layer = new LiveObject<EllipseLayer>({
+					type: LayerType.Ellipse,
+					x: position.x,
+					y: position.y,
+					width: 100,
+					height: 100,
+					fill: { r: 217, g: 217, b: 217 },
+					stroke: { r: 217, g: 217, b: 217 },
+					opacity: 100,
+				});
 			}
 
 			if (layer) {
@@ -53,10 +75,18 @@ const Canvas = () => {
 		[],
 	);
 
-	const handlePointerUp = useMutation(({ storage }, e: React.PointerEvent) => {
-		const point = pointerEventToCanvasPoint(e, camera);
-		insertLayer(LayerType.Rectangle, point);
-	}, []);
+	const handlePointerUp = useMutation(
+		({ storage }, e: React.PointerEvent) => {
+			const point = pointerEventToCanvasPoint(e, camera);
+			if (canvasStates.mode === CanvasMode.None) {
+				return;
+			}
+			if (canvasStates.mode === CanvasMode.Inserting) {
+				insertLayer(canvasStates.layerType, point);
+			}
+		},
+		[canvasStates, insertLayer],
+	);
 
 	return (
 		<div className="flex h-screen w-full">
@@ -70,6 +100,7 @@ const Canvas = () => {
 					</svg>
 				</div>
 			</main>
+			<ToolsBar canvasStates={canvasStates} setCanvasStates={newState => setCanvasStates(newState)} />
 		</div>
 	);
 };
