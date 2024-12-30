@@ -5,10 +5,9 @@ export const rgbToHex = (color: Color): string => {
 };
 
 export const pointerEventToCanvasPoint = (e: React.PointerEvent, camera: Camera): Point => {
-	const rect = e.currentTarget.getBoundingClientRect();
 	return {
-		x: (e.clientX - rect.left - camera.x) / camera.zoom,
-		y: (e.clientY - rect.top - camera.y) / camera.zoom,
+		x: Math.round(e.clientX) - camera.x,
+		y: Math.round(e.clientY) - camera.y,
 	};
 };
 
