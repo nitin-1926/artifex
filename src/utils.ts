@@ -1,12 +1,65 @@
-import { type Camera, type Color, type Point } from './types';
+import { type Camera, type Color, type PathLayer, type Point, LayerType } from './types';
 
-export const rgbToHex = (color: Color) => {
+export const rgbToHex = (color: Color): string => {
 	return `#${color.r.toString(16).padStart(2, '0')}${color.g.toString(16).padStart(2, '0')}${color.b.toString(16).padStart(2, '0')}`;
 };
 
 export const pointerEventToCanvasPoint = (e: React.PointerEvent, camera: Camera): Point => {
+	const rect = e.currentTarget.getBoundingClientRect();
 	return {
-		x: Math.round(e.clientX) - camera.x,
-		y: Math.round(e.clientY) - camera.y,
+		x: (e.clientX - rect.left - camera.x) / camera.zoom,
+		y: (e.clientY - rect.top - camera.y) / camera.zoom,
 	};
+};
+
+export const penPointsToPathLayer = (points: number[][], penColor: Color): PathLayer => {
+	let left = Number.POSITIVE_INFINITY;
+	let top = Number.POSITIVE_INFINITY;
+	let right = Number.NEGATIVE_INFINITY;
+	let bottom = Number.NEGATIVE_INFINITY;
+
+	for (const point of points) {
+		const [x, y] = point;
+		if (x === undefined || y === undefined) continue;
+
+		left = Math.min(left, x);
+		top = Math.min(top, y);
+		right = Math.max(right, x);
+		bottom = Math.max(bottom, y);
+	}
+
+	return {
+		type: LayerType.Path,
+		x: left,
+		y: top,
+		width: right - left,
+		height: bottom - top,
+		fill: penColor,
+		stroke: penColor,
+		opacity: 100,
+		points: points
+			.filter(
+				(point): point is [number, number, number] =>
+					point[0] !== undefined && point[1] !== undefined && point[2] !== undefined,
+			)
+			.map(([x, y, pressure]) => [x - left, y - top, pressure]),
+	};
+};
+
+export const getSvgPathFromStroke = (stroke: number[][]) => {
+	if (!stroke.length) return '';
+
+	const d = stroke.reduce(
+		(acc, [x0, y0], i, arr) => {
+			const nextPoint = arr[(i + 1) % arr.length];
+			if (!nextPoint) return acc;
+			const [x1, y1] = nextPoint;
+			acc.push(x0!, y0!, (x0! + x1!) / 2, (y0! + y1!) / 2);
+			return acc;
+		},
+		['M', ...(stroke[0] ?? []), 'Q'],
+	);
+
+	d.push('Z');
+	return d.join(' ');
 };

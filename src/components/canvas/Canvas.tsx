@@ -1,7 +1,7 @@
 'use client';
 
 import { LiveObject } from '@liveblocks/client';
-import { useMutation, useStorage } from '@liveblocks/react';
+import { useMutation, useSelf, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import { useCallback, useState } from 'react';
 import {
@@ -11,18 +11,21 @@ import {
 	type EllipseLayer,
 	type Layer,
 	LayerType,
+	type PathLayer,
 	type Point,
 	type RectangleLayer,
 } from '~/types';
-import { pointerEventToCanvasPoint, rgbToHex } from '~/utils';
+import { penPointsToPathLayer, pointerEventToCanvasPoint, rgbToHex } from '~/utils';
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
+import PathLayerComponent from './PathLayerComponent';
 
 const MAX_LAYERS = 100;
 
 const Canvas = () => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
+	const pencilDraft = useSelf(self => self.presence.pencilDraft);
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 	const [isDragging, setIsDragging] = useState(false);
@@ -76,6 +79,49 @@ const Canvas = () => {
 		[],
 	);
 
+	const insertPath = useMutation(({ storage, self, setMyPresence }) => {
+		const liveLayers = storage.get('layers');
+		const { pencilDraft } = self.presence;
+
+		if (pencilDraft === null || pencilDraft.length < 3 || liveLayers.size >= MAX_LAYERS) {
+			setMyPresence({ pencilDraft: null });
+			return;
+		}
+
+		const pathId = nanoid();
+		liveLayers.set(
+			pathId,
+			new LiveObject<PathLayer>(penPointsToPathLayer(pencilDraft, { r: 217, g: 217, b: 217 })),
+		);
+
+		const liveLayerIds = storage.get('layerIds');
+		liveLayerIds.push(pathId);
+
+		setMyPresence({ selection: [pathId], pencilDraft: null }, { addToHistory: true });
+		setCanvasStates({ mode: CanvasMode.Pencil });
+	}, []);
+
+	const startDrawing = useMutation(
+		({ setMyPresence }, point: Point, pressure: number) => {
+			setMyPresence({
+				pencilDraft: [[point.x, point.y, pressure]],
+				penColor: { r: 217, g: 217, b: 217 },
+			});
+		},
+		[camera],
+	);
+
+	const continueDrawing = useMutation(
+		({ self, setMyPresence }, point: Point, e: React.PointerEvent) => {
+			const { pencilDraft } = self.presence;
+			if (canvasStates.mode !== CanvasMode.Pencil || e.buttons !== 1 || pencilDraft === null) {
+				return;
+			}
+			setMyPresence({ pencilDraft: [...pencilDraft, [point.x, point.y, e.pressure]] });
+		},
+		[camera, canvasStates.mode],
+	);
+
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
@@ -85,6 +131,8 @@ const Canvas = () => {
 				insertLayer(canvasStates.layerType, point);
 			} else if (canvasStates.mode === CanvasMode.Dragging) {
 				setCanvasStates({ mode: CanvasMode.Dragging, origin: null });
+			} else if (canvasStates.mode === CanvasMode.Pencil) {
+				insertPath();
 			}
 			setIsDragging(false);
 		},
@@ -105,9 +153,14 @@ const Canvas = () => {
 			if (canvasStates.mode === CanvasMode.Dragging) {
 				setCanvasStates({ mode: CanvasMode.Dragging, origin: point });
 				setIsDragging(true);
+				return;
+			}
+			if (canvasStates.mode === CanvasMode.Pencil) {
+				startDrawing(point, e.pressure);
+				return;
 			}
 		},
-		[camera, canvasStates.mode, setCanvasStates],
+		[camera, canvasStates.mode, setCanvasStates, startDrawing],
 	);
 
 	const handlePointerMove = useMutation(
@@ -121,23 +174,32 @@ const Canvas = () => {
 					x: prevCamera.x + deltaX,
 					y: prevCamera.y + deltaY,
 				}));
+			} else if (canvasStates.mode === CanvasMode.Pencil) {
+				continueDrawing(point, e);
 			}
 		},
-		[camera, canvasStates, setCanvasStates],
+		[camera, canvasStates, continueDrawing],
 	);
+
+	const getCursor = () => {
+		if (canvasStates.mode === CanvasMode.None) {
+			return 'default';
+		}
+		if (canvasStates.mode === CanvasMode.Dragging) {
+			return isDragging ? 'grabbing' : 'grab';
+		}
+		if (canvasStates.mode === CanvasMode.Pencil) {
+			// TODO: Implement custom pencil cursor
+			return 'pencil';
+		}
+	};
 
 	return (
 		<div className="flex h-screen w-full">
 			<main className="overflow-y-auto fixed left-0 right-0 h-screen">
 				<div
 					style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
-					className={`h-full w-full touch-none ${
-						canvasStates.mode === CanvasMode.None
-							? 'cursor-default'
-							: canvasStates.mode === CanvasMode.Dragging && isDragging
-								? 'cursor-grabbing'
-								: 'cursor-grab'
-					}`}
+					className={`h-full w-full touch-none cursor-${getCursor()}`}
 				>
 					<svg
 						onWheel={handleWheel}
@@ -149,6 +211,19 @@ const Canvas = () => {
 						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
 							{layerIds?.map(layerId => <LayerComponent key={layerId} id={layerId} />)}
 						</g>
+						{pencilDraft !== null && pencilDraft.length > 0 && (
+							<PathLayerComponent
+								x={0}
+								y={0}
+								fill={{
+									r: 217,
+									g: 217,
+									b: 217,
+								}}
+								opacity={100}
+								points={pencilDraft}
+							/>
+						)}
 					</svg>
 				</div>
 			</main>
