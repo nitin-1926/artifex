@@ -9,6 +9,7 @@ const PathLayerComponent = ({
 	fill,
 	opacity,
 	points,
+	onPointerDown,
 }: {
 	x: number;
 	y: number;
@@ -16,6 +17,7 @@ const PathLayerComponent = ({
 	fill: Color;
 	opacity: number;
 	points: number[][];
+	onPointerDown?: (e: React.PointerEvent) => void;
 }) => {
 	const pathData = getSvgPathFromStroke(
 		getStroke(points, {
@@ -36,6 +38,7 @@ const PathLayerComponent = ({
 			stroke={stroke ? rgbToHex(stroke) : '#ccc'}
 			strokeWidth={1}
 			opacity={`${opacity ?? 100}%`}
+			onPointerDown={onPointerDown}
 		/>
 	);
 };
