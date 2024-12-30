@@ -1,11 +1,11 @@
 import { useSelf, useStorage } from '@liveblocks/react';
 import { useEffect, useRef, useState } from 'react';
-import { LayerType } from '~/types';
+import { LayerType, Side, XYWH } from '~/types';
 
 const handleWidth = 8;
 const handleHeight = 8;
 
-const SelectionBox = () => {
+const SelectionBox = ({ onResize }: { onResize: (corner: Side, initialBounds: XYWH) => void }) => {
 	const selectedLayerId = useSelf(self => (self.presence.selection.length === 1 ? self.presence.selection[0] : null));
 	const isShowingHandles = useStorage(
 		storage => selectedLayerId && storage.layers.get(selectedLayerId)?.type !== LayerType.Path,
@@ -59,6 +59,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x - handleWidth / 2}px, ${layer.y - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Top + Side.Left, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -68,6 +72,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x + layer.width / 2 - handleWidth / 2}px, ${layer.y - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Top, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -77,6 +85,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x + layer.width - handleWidth / 2}px, ${layer.y - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Top + Side.Right, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -86,6 +98,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x - handleWidth / 2}px, ${layer.y + layer.height / 2 - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Left, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -95,6 +111,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x - handleWidth / 2}px, ${layer.y + layer.height - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Bottom + Side.Left, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -104,6 +124,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x + layer.width - handleWidth / 2}px, ${layer.y + layer.height / 2 - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Right, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -113,6 +137,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x + layer.width - handleWidth / 2}px, ${layer.y + layer.height - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Bottom + Side.Right, layer);
+						}}
 					/>
 					<rect
 						style={{
@@ -122,6 +150,10 @@ const SelectionBox = () => {
 							transform: `translate(${layer.x + layer.width / 2 - handleWidth / 2}px, ${layer.y + layer.height - handleHeight / 2}px)`,
 						}}
 						className="fill-white stroke-[#0b99ff] stroke-[1px]"
+						onPointerDown={e => {
+							e.stopPropagation();
+							onResize(Side.Bottom, layer);
+						}}
 					/>
 				</>
 			)}

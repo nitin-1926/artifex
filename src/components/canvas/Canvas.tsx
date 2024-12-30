@@ -14,9 +14,11 @@ import {
 	type PathLayer,
 	type Point,
 	type RectangleLayer,
+	Side,
 	type TextLayer,
+	XYWH,
 } from '~/types';
-import { penPointsToPathLayer, pointerEventToCanvasPoint, rgbToHex } from '~/utils';
+import { penPointsToPathLayer, pointerEventToCanvasPoint, resizeBounds, rgbToHex } from '~/utils';
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
@@ -124,6 +126,28 @@ const Canvas = () => {
 		[setCanvasStates],
 	);
 
+	const handleResize = useCallback(
+		(corner: Side, initialBounds: XYWH) => {
+			setCanvasStates({ mode: CanvasMode.Resizing, initialBounds, corner });
+		},
+		[setCanvasStates],
+	);
+
+	const resizeSelectedLayer = useMutation(
+		({ storage, self }, point: Point) => {
+			if (canvasStates.mode !== CanvasMode.Resizing) return;
+			const bounds = resizeBounds(canvasStates.initialBounds, canvasStates.corner, point);
+			const liveLayers = storage.get('layers');
+			if (self.presence.selection.length > 0) {
+				const layer = liveLayers.get(self.presence.selection[0]!);
+				if (layer) {
+					layer.update(bounds);
+				}
+			}
+		},
+		[canvasStates],
+	);
+
 	const startDrawing = useMutation(
 		({ setMyPresence }, point: Point, pressure: number) => {
 			setMyPresence({
@@ -152,25 +176,35 @@ const Canvas = () => {
 			if (!self.presence.selection.includes(layerId)) {
 				setMyPresence({ selection: [layerId] });
 			}
+			setCanvasStates({ mode: CanvasMode.Translating, current: pointerEventToCanvasPoint(e, camera) });
 		},
-		[canvasStates.mode],
+		[camera, canvasStates.mode, setCanvasStates],
 	);
+
+	const unselectLayers = useMutation(({ self, setMyPresence }) => {
+		if (self.presence.selection.length > 0) {
+			setMyPresence({ selection: [] });
+		}
+	}, []);
 
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
 			if (canvasStates.mode === CanvasMode.None) {
-				return;
+				unselectLayers();
+				setCanvasStates({ mode: CanvasMode.None });
 			} else if (canvasStates.mode === CanvasMode.Inserting) {
 				insertLayer(canvasStates.layerType, point);
 			} else if (canvasStates.mode === CanvasMode.Dragging) {
 				setCanvasStates({ mode: CanvasMode.Dragging, origin: null });
 			} else if (canvasStates.mode === CanvasMode.Pencil) {
 				insertPath();
+			} else {
+				setCanvasStates({ mode: CanvasMode.None });
 			}
 			setIsDragging(false);
 		},
-		[camera, canvasStates, insertLayer, setCanvasStates, insertPath, setIsDragging],
+		[camera, canvasStates, insertLayer, setCanvasStates, insertPath, setIsDragging, unselectLayers],
 	);
 
 	const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -210,9 +244,11 @@ const Canvas = () => {
 				}));
 			} else if (canvasStates.mode === CanvasMode.Pencil) {
 				continueDrawing(point, e);
+			} else if (canvasStates.mode === CanvasMode.Resizing) {
+				resizeSelectedLayer(point);
 			}
 		},
-		[camera, canvasStates, setCamera, continueDrawing],
+		[camera, canvasStates, setCamera, continueDrawing, resizeSelectedLayer],
 	);
 
 	const getCursor = () => {
@@ -246,7 +282,7 @@ const Canvas = () => {
 							{layerIds?.map(layerId => (
 								<LayerComponent key={layerId} id={layerId} onLayerClick={handleLayerSelection} />
 							))}
-							<SelectionBox />
+							<SelectionBox onResize={handleResize} />
 							{pencilDraft !== null && pencilDraft.length > 0 && (
 								<PathLayerComponent
 									x={0}

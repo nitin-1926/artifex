@@ -1,4 +1,4 @@
-import { type Camera, type Color, type PathLayer, type Point, LayerType } from './types';
+import { type Camera, type Color, type PathLayer, type Point, LayerType, Side, XYWH } from './types';
 
 export const rgbToHex = (color: Color): string => {
 	return `#${color.r.toString(16).padStart(2, '0')}${color.g.toString(16).padStart(2, '0')}${color.b.toString(16).padStart(2, '0')}`;
@@ -62,4 +62,32 @@ export const getSvgPathFromStroke = (stroke: number[][]) => {
 
 	d.push('Z');
 	return d.join(' ');
+};
+
+export const resizeBounds = (initialBounds: XYWH, corner: Side, point: Point): XYWH => {
+	const result = {
+		x: initialBounds.x,
+		y: initialBounds.y,
+		width: initialBounds.width,
+		height: initialBounds.height,
+	};
+
+	if (corner === Side.Left || (corner & Side.Left) !== 0) {
+		result.x = Math.min(point.x, initialBounds.x + initialBounds.width);
+		result.width = Math.abs(initialBounds.x + initialBounds.width - point.x);
+	}
+	if (corner === Side.Right || (corner & Side.Right) !== 0) {
+		result.x = Math.min(point.x, initialBounds.x);
+		result.width = Math.abs(point.x - initialBounds.x);
+	}
+	if (corner === Side.Top || (corner & Side.Top) !== 0) {
+		result.y = Math.min(point.y, initialBounds.y + initialBounds.height);
+		result.height = Math.abs(initialBounds.y + initialBounds.height - point.y);
+	}
+	if (corner === Side.Bottom || (corner & Side.Bottom) !== 0) {
+		result.y = Math.min(point.y, initialBounds.y);
+		result.height = Math.abs(point.y - initialBounds.y);
+	}
+
+	return result;
 };
