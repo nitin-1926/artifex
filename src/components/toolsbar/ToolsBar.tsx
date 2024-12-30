@@ -5,6 +5,8 @@ import ShapeSelectionButton from './ShapeSelectionButton';
 import TextButton from './TextButton';
 import ZoomInButton from './ZoomInButton';
 import ZoomOutButton from './ZoomOutButton';
+import RedoButton from './RedoButton';
+import UndoButton from './UndoButton';
 
 const ToolsBar = ({
 	canvasStates,
@@ -55,11 +57,15 @@ const ToolsBar = ({
 						setCanvasStates({ mode: CanvasMode.Inserting, layerType: LayerType.Text });
 					}}
 				/>
-				<div className="self-stretch">
-					<div className="flex items-center justify-center">
-						<ZoomInButton onClick={zoomIn} disabled={!canZoomIn} />
-						<ZoomOutButton onClick={zoomOut} disabled={!canZoomOut} />
-					</div>
+				<div className="w-[1px] self-stretch bg-black/10" />
+				<div className="flex items-center justify-center">
+					<UndoButton onClick={zoomIn} disabled={!canZoomIn} />
+					<RedoButton onClick={zoomOut} disabled={!canZoomOut} />
+				</div>
+				<div className="w-[1px] self-stretch bg-black/10" />
+				<div className="flex items-center justify-center">
+					<ZoomInButton onClick={zoomIn} disabled={!canZoomIn} />
+					<ZoomOutButton onClick={zoomOut} disabled={!canZoomOut} />
 				</div>
 			</div>
 		</div>
