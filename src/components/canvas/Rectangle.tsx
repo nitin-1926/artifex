@@ -1,7 +1,15 @@
 import { type RectangleLayer } from '~/types';
 import { rgbToHex } from '~/utils';
 
-const Rectangle = ({ id, layer }: { id: string; layer: RectangleLayer }) => {
+const Rectangle = ({
+	id,
+	layer,
+	onLayerClick,
+}: {
+	id: string;
+	layer: RectangleLayer;
+	onLayerClick: (e: React.PointerEvent, layerId: string) => void;
+}) => {
 	const { x, y, width, height, fill, stroke, opacity, cornerRadius } = layer;
 	return (
 		<g>
@@ -15,6 +23,7 @@ const Rectangle = ({ id, layer }: { id: string; layer: RectangleLayer }) => {
 				opacity={`${opacity ?? 100}%`}
 				rx={cornerRadius ?? 0}
 				ry={cornerRadius ?? 0}
+				onPointerDown={e => onLayerClick(e, id)}
 			/>
 		</g>
 	);
