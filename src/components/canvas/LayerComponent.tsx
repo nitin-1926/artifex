@@ -6,23 +6,25 @@ import PathLayerComponent from './PathLayerComponent';
 import Rectangle from './Rectangle';
 import Text from './Text';
 
-const LayerComponent = memo(({ id }: { id: string }) => {
-	const layer = useStorage(storage => storage.layers.get(id));
-	if (!layer) return null;
+const LayerComponent = memo(
+	({ id, onLayerClick }: { id: string; onLayerClick: (e: React.PointerEvent, layerId: string) => void }) => {
+		const layer = useStorage(storage => storage.layers.get(id));
+		if (!layer) return null;
 
-	switch (layer.type) {
-		case LayerType.Rectangle:
-			return <Rectangle id={id} layer={layer} />;
-		case LayerType.Ellipse:
-			return <Ellipse id={id} layer={layer} />;
-		case LayerType.Path:
-			return <PathLayerComponent {...layer} />;
-		case LayerType.Text:
-			return <Text id={id} layer={layer} />;
-		default:
-			return null;
-	}
-});
+		switch (layer.type) {
+			case LayerType.Rectangle:
+				return <Rectangle id={id} layer={layer} onLayerClick={onLayerClick} />;
+			case LayerType.Ellipse:
+				return <Ellipse id={id} layer={layer} onLayerClick={onLayerClick} />;
+			case LayerType.Path:
+				return <PathLayerComponent {...layer} onPointerDown={e => onLayerClick(e, id)} />;
+			case LayerType.Text:
+				return <Text id={id} layer={layer} onLayerClick={onLayerClick} />;
+			default:
+				return null;
+		}
+	},
+);
 
 LayerComponent.displayName = 'LayerComponent';
 
