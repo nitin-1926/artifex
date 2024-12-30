@@ -12,7 +12,21 @@ const Ellipse = ({
 }) => {
 	const { x, y, width, height, fill, stroke, opacity } = layer;
 	return (
-		<g>
+		<g className="group">
+			{/* Hover Border */}
+			<ellipse
+				className="pointer-events-none opacity-0 group-hover:opacity-100"
+				style={{ transform: `translate(${x}px, ${y}px)` }}
+				cx={width / 2}
+				cy={height / 2}
+				rx={width / 2}
+				ry={height / 2}
+				fill="none"
+				strokeWidth={4}
+				stroke={'#0b99ff'}
+			/>
+
+			{/* Main Ellipse */}
 			<ellipse
 				style={{ transform: `translate(${x}px, ${y}px)` }}
 				fill={fill ? rgbToHex(fill) : '#ccc'}
