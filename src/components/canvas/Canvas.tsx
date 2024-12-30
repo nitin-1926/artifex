@@ -14,6 +14,7 @@ import {
 	type PathLayer,
 	type Point,
 	type RectangleLayer,
+	type TextLayer,
 } from '~/types';
 import { penPointsToPathLayer, pointerEventToCanvasPoint, rgbToHex } from '~/utils';
 import ToolsBar from '../toolsbar/ToolsBar';
@@ -63,6 +64,21 @@ const Canvas = () => {
 					y: position.y,
 					width: 100,
 					height: 100,
+					fill: { r: 217, g: 217, b: 217 },
+					stroke: { r: 217, g: 217, b: 217 },
+					opacity: 100,
+				});
+			} else if (layerType === LayerType.Text) {
+				layer = new LiveObject<TextLayer>({
+					type: LayerType.Text,
+					x: position.x,
+					y: position.y,
+					width: 100,
+					height: 100,
+					text: 'Enter Text',
+					fontSize: 20,
+					fontFamily: 'Inter',
+					fontWeight: 400,
 					fill: { r: 217, g: 217, b: 217 },
 					stroke: { r: 217, g: 217, b: 217 },
 					opacity: 100,

@@ -4,6 +4,7 @@ import { LayerType } from '~/types';
 import Ellipse from './Ellipse';
 import PathLayerComponent from './PathLayerComponent';
 import Rectangle from './Rectangle';
+import Text from './Text';
 
 const LayerComponent = memo(({ id }: { id: string }) => {
 	const layer = useStorage(storage => storage.layers.get(id));
@@ -16,6 +17,8 @@ const LayerComponent = memo(({ id }: { id: string }) => {
 			return <Ellipse id={id} layer={layer} />;
 		case LayerType.Path:
 			return <PathLayerComponent {...layer} />;
+		case LayerType.Text:
+			return <Text id={id} layer={layer} />;
 		default:
 			return null;
 	}
