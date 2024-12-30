@@ -90,6 +90,7 @@ const Canvas = () => {
 				liveLayers.set(layerId, layer);
 
 				setMyPresence({ selection: [layerId] }, { addToHistory: true });
+				setCanvasStates({ mode: CanvasMode.None });
 			}
 		},
 		[],
