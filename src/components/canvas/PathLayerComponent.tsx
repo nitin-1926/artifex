@@ -29,17 +29,32 @@ const PathLayerComponent = ({
 	);
 
 	return (
-		<path
-			style={{
-				transform: `translate(${x}px, ${y}px)`,
-			}}
-			d={pathData}
-			fill={fill ? rgbToHex(fill) : '#ccc'}
-			stroke={stroke ? rgbToHex(stroke) : '#ccc'}
-			strokeWidth={1}
-			opacity={`${opacity ?? 100}%`}
-			onPointerDown={onPointerDown}
-		/>
+		<g className="group">
+			{/* Hover Border */}
+			<path
+				className="pointer-events-none opacity-0 group-hover:opacity-100"
+				style={{
+					transform: `translate(${x}px, ${y}px)`,
+				}}
+				d={pathData}
+				fill="none"
+				strokeWidth={4}
+				stroke={'#0b99ff'}
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+
+			{/* Main Path */}
+			<path
+				d={pathData}
+				style={{ transform: `translate(${x}px, ${y}px)` }}
+				fill={fill ? rgbToHex(fill) : '#ccc'}
+				stroke={stroke ? rgbToHex(stroke) : '#ccc'}
+				strokeWidth={1}
+				opacity={`${opacity ?? 100}%`}
+				onPointerDown={onPointerDown}
+			/>
+		</g>
 	);
 };
 
