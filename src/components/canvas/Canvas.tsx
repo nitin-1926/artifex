@@ -95,27 +95,30 @@ const Canvas = () => {
 		[],
 	);
 
-	const insertPath = useMutation(({ storage, self, setMyPresence }) => {
-		const liveLayers = storage.get('layers');
-		const { pencilDraft } = self.presence;
+	const insertPath = useMutation(
+		({ storage, self, setMyPresence }) => {
+			const liveLayers = storage.get('layers');
+			const { pencilDraft } = self.presence;
 
-		if (pencilDraft === null || pencilDraft.length < 3 || liveLayers.size >= MAX_LAYERS) {
-			setMyPresence({ pencilDraft: null });
-			return;
-		}
+			if (pencilDraft === null || pencilDraft.length < 3 || liveLayers.size >= MAX_LAYERS) {
+				setMyPresence({ pencilDraft: null });
+				return;
+			}
 
-		const pathId = nanoid();
-		liveLayers.set(
-			pathId,
-			new LiveObject<PathLayer>(penPointsToPathLayer(pencilDraft, { r: 217, g: 217, b: 217 })),
-		);
+			const pathId = nanoid();
+			liveLayers.set(
+				pathId,
+				new LiveObject<PathLayer>(penPointsToPathLayer(pencilDraft, { r: 217, g: 217, b: 217 })),
+			);
 
-		const liveLayerIds = storage.get('layerIds');
-		liveLayerIds.push(pathId);
+			const liveLayerIds = storage.get('layerIds');
+			liveLayerIds.push(pathId);
 
-		setMyPresence({ selection: [pathId], pencilDraft: null }, { addToHistory: true });
-		setCanvasStates({ mode: CanvasMode.Pencil });
-	}, []);
+			setMyPresence({ selection: [pathId], pencilDraft: null }, { addToHistory: true });
+			setCanvasStates({ mode: CanvasMode.Pencil });
+		},
+		[setCanvasStates],
+	);
 
 	const startDrawing = useMutation(
 		({ setMyPresence }, point: Point, pressure: number) => {
@@ -135,7 +138,7 @@ const Canvas = () => {
 			}
 			setMyPresence({ pencilDraft: [...pencilDraft, [point.x, point.y, e.pressure]] });
 		},
-		[camera, canvasStates.mode],
+		[canvasStates.mode],
 	);
 
 	const handlePointerUp = useMutation(
@@ -152,7 +155,7 @@ const Canvas = () => {
 			}
 			setIsDragging(false);
 		},
-		[canvasStates, insertLayer],
+		[camera, canvasStates, insertLayer, setCanvasStates, insertPath, setIsDragging],
 	);
 
 	const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -176,7 +179,7 @@ const Canvas = () => {
 				return;
 			}
 		},
-		[camera, canvasStates.mode, setCanvasStates, startDrawing],
+		[camera, canvasStates.mode, setCanvasStates, setIsDragging, startDrawing],
 	);
 
 	const handlePointerMove = useMutation(
@@ -194,7 +197,7 @@ const Canvas = () => {
 				continueDrawing(point, e);
 			}
 		},
-		[camera, canvasStates, continueDrawing],
+		[camera, canvasStates, setCamera, continueDrawing],
 	);
 
 	const getCursor = () => {
