@@ -18,7 +18,13 @@ import {
 	type TextLayer,
 	XYWH,
 } from '~/types';
-import { penPointsToPathLayer, pointerEventToCanvasPoint, resizeBounds, rgbToHex } from '~/utils';
+import {
+	findIntersectingLayers,
+	penPointsToPathLayer,
+	pointerEventToCanvasPoint,
+	resizeBounds,
+	rgbToHex,
+} from '~/utils';
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
@@ -212,10 +218,32 @@ const Canvas = () => {
 		[canvasStates, setCanvasStates],
 	);
 
+	const startMultiSelection = useCallback(
+		(point: Point, origin: Point) => {
+			if (Math.abs(point.x - origin.x) + Math.abs(point.y - origin.y) < 5) {
+				return;
+			}
+			setCanvasStates({ mode: CanvasMode.SelectionNet, origin, current: point });
+		},
+		[setCanvasStates],
+	);
+
+	const updateSelectionNet = useMutation(
+		({ storage, setMyPresence }, current: Point, origin: Point) => {
+			if (layerIds) {
+				const layers = storage.get('layers').toImmutable();
+				setCanvasStates({ mode: CanvasMode.SelectionNet, origin, current });
+				const ids = findIntersectingLayers(layerIds, layers, origin, current);
+				setMyPresence({ selection: ids });
+			}
+		},
+		[layerIds, setCanvasStates],
+	);
+
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
-			if (canvasStates.mode === CanvasMode.None) {
+			if (canvasStates.mode === CanvasMode.None || canvasStates.mode === CanvasMode.Pressing) {
 				unselectLayers();
 				setCanvasStates({ mode: CanvasMode.None });
 			} else if (canvasStates.mode === CanvasMode.Inserting) {
@@ -253,6 +281,7 @@ const Canvas = () => {
 				startDrawing(point, e.pressure);
 				return;
 			}
+			setCanvasStates({ mode: CanvasMode.Pressing, origin: point });
 		},
 		[camera, canvasStates.mode, setCanvasStates, setIsDragging, startDrawing],
 	);
@@ -260,6 +289,11 @@ const Canvas = () => {
 	const handlePointerMove = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
+			if (canvasStates.mode === CanvasMode.Pressing) {
+				startMultiSelection(point, canvasStates.origin);
+			} else if (canvasStates.mode === CanvasMode.SelectionNet) {
+				updateSelectionNet(point, canvasStates.origin);
+			}
 			if (canvasStates.mode === CanvasMode.Dragging && canvasStates.origin !== null) {
 				const deltaX = e.movementX;
 				const deltaY = e.movementY;
@@ -276,7 +310,15 @@ const Canvas = () => {
 				translateSelectedLayer(point);
 			}
 		},
-		[camera, canvasStates, setCamera, continueDrawing, resizeSelectedLayer, translateSelectedLayer],
+		[
+			camera,
+			canvasStates,
+			setCamera,
+			continueDrawing,
+			resizeSelectedLayer,
+			translateSelectedLayer,
+			updateSelectionNet,
+		],
 	);
 
 	const getCursor = () => {
@@ -311,6 +353,15 @@ const Canvas = () => {
 								<LayerComponent key={layerId} id={layerId} onLayerClick={handleLayerSelection} />
 							))}
 							<SelectionBox onResize={handleResize} />
+							{canvasStates.mode === CanvasMode.SelectionNet && canvasStates.current != null && (
+								<rect
+									className="fill-blue-600/5 stroke-blue-600 stroke-[0.5]"
+									x={Math.min(canvasStates.origin.x, canvasStates.current.x)}
+									y={Math.min(canvasStates.origin.y, canvasStates.current.y)}
+									width={Math.abs(canvasStates.origin.x - canvasStates.current.x)}
+									height={Math.abs(canvasStates.origin.y - canvasStates.current.y)}
+								/>
+							)}
 							{pencilDraft !== null && pencilDraft.length > 0 && (
 								<PathLayerComponent
 									x={0}

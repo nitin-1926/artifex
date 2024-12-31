@@ -1,4 +1,4 @@
-import { type Camera, type Color, type PathLayer, type Point, LayerType, Side, XYWH } from './types';
+import { type Camera, type Color, type PathLayer, type Point, Layer, LayerType, Side, XYWH } from './types';
 
 export const rgbToHex = (color: Color): string => {
 	return `#${color.r.toString(16).padStart(2, '0')}${color.g.toString(16).padStart(2, '0')}${color.b.toString(16).padStart(2, '0')}`;
@@ -89,4 +89,28 @@ export const resizeBounds = (initialBounds: XYWH, corner: Side, point: Point): X
 	}
 
 	return result;
+};
+
+export const findIntersectingLayers = (
+	layerIds: readonly string[],
+	layers: ReadonlyMap<string, Layer>,
+	a: Point,
+	b: Point,
+): string[] => {
+	const rect = {
+		x: Math.min(a.x, b.x),
+		y: Math.min(a.y, b.y),
+		width: Math.abs(a.x - b.x),
+		height: Math.abs(a.y - b.y),
+	};
+	const ids = [];
+	for (const id of layerIds) {
+		const layer = layers.get(id);
+		if (!layer) continue;
+		const { x, y, width, height } = layer;
+		if (rect.x + rect.width > x && rect.x < x + width && rect.y + rect.height > y && rect.y < y + height) {
+			ids.push(id);
+		}
+	}
+	return ids;
 };
