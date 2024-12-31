@@ -398,6 +398,9 @@ const Canvas = () => {
 						onPointerUp={handlePointerUp}
 						onPointerDown={handlePointerDown}
 						onPointerMove={handlePointerMove}
+						onContextMenu={e => {
+							e.preventDefault();
+						}}
 						className="h-full w-full"
 					>
 						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
