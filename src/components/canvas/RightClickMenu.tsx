@@ -1,9 +1,10 @@
 import { useMutation, useSelf } from '@liveblocks/react';
+import { memo } from 'react';
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs';
 import useSelectionBounds from '~/hooks/useSelectionBounds';
 import { type Camera } from '~/types';
 
-const RightClickMenu = ({ camera }: { camera: Camera }) => {
+const RightClickMenu = memo(({ camera }: { camera: Camera }) => {
 	const bounds = useSelectionBounds();
 	const selection = useSelf(self => self.presence.selection);
 
@@ -76,6 +77,8 @@ const RightClickMenu = ({ camera }: { camera: Camera }) => {
 			</button>
 		</div>
 	);
-};
+});
+
+RightClickMenu.displayName = 'RightClickMenu';
 
 export default RightClickMenu;
