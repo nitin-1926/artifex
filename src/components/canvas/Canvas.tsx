@@ -3,7 +3,7 @@
 import { LiveObject } from '@liveblocks/client';
 import { useCanRedo, useCanUndo, useHistory, useMutation, useSelf, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
 	type Camera,
 	CanvasMode,
@@ -29,6 +29,7 @@ import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
 import SelectionBox from './SelectionBox';
+import useDeleteLayers from '~/hooks/useDeleteLayers';
 
 const MAX_LAYERS = 100;
 
@@ -39,6 +40,7 @@ const Canvas = () => {
 	const history = useHistory();
 	const canUndo = useCanUndo();
 	const canRedo = useCanRedo();
+	const deleteLayers = useDeleteLayers();
 
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
@@ -333,6 +335,25 @@ const Canvas = () => {
 			return 'pencil';
 		}
 	};
+
+	// Keyboard shortcuts
+	useEffect(() => {
+		const onKeyDown = (e: KeyboardEvent) => {
+			const activeElement = document.activeElement;
+			const isInputField =
+				activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA');
+			if (isInputField) return;
+
+			switch (e.key) {
+				case 'Backspace':
+					deleteLayers();
+					break;
+			}
+		};
+
+		document.addEventListener('keydown', onKeyDown);
+		return () => document.removeEventListener('keydown', onKeyDown);
+	}, [deleteLayers]);
 
 	return (
 		<div className="flex h-screen w-full">
