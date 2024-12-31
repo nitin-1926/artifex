@@ -327,6 +327,7 @@ const Canvas = () => {
 			resizeSelectedLayer,
 			translateSelectedLayer,
 			updateSelectionNet,
+			startMultiSelection,
 		],
 	);
 
