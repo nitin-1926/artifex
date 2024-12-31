@@ -29,6 +29,7 @@ import {
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
+import RightClickMenu from './RightClickMenu';
 import SelectionBox from './SelectionBox';
 
 const MAX_LAYERS = 100;
@@ -188,7 +189,11 @@ const Canvas = () => {
 			if (!self.presence.selection.includes(layerId)) {
 				setMyPresence({ selection: [layerId] });
 			}
-			setCanvasStates({ mode: CanvasMode.Translating, current: pointerEventToCanvasPoint(e, camera) });
+			if (e.nativeEvent.button === 2) {
+				setCanvasStates({ mode: CanvasMode.RightClick });
+			} else {
+				setCanvasStates({ mode: CanvasMode.Translating, current: pointerEventToCanvasPoint(e, camera) });
+			}
 		},
 		[camera, canvasStates.mode, setCanvasStates, history],
 	);
@@ -245,6 +250,7 @@ const Canvas = () => {
 	const handlePointerUp = useMutation(
 		({ storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
+			if (canvasStates.mode === CanvasMode.RightClick) return;
 			if (canvasStates.mode === CanvasMode.None || canvasStates.mode === CanvasMode.Pressing) {
 				unselectLayers();
 				setCanvasStates({ mode: CanvasMode.None });
@@ -386,6 +392,7 @@ const Canvas = () => {
 					style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
 					className={`h-full w-full touch-none cursor-${getCursor()}`}
 				>
+					{canvasStates.mode === CanvasMode.RightClick && <RightClickMenu camera={camera} />}
 					<svg
 						onWheel={handleWheel}
 						onPointerUp={handlePointerUp}
