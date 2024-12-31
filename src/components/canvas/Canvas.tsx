@@ -348,6 +348,15 @@ const Canvas = () => {
 				case 'Backspace':
 					deleteLayers();
 					break;
+				case 'z':
+					if (e.ctrlKey || e.metaKey) {
+						if (e.shiftKey) {
+							history.redo();
+						} else {
+							history.undo();
+						}
+					}
+					break;
 			}
 		};
 
