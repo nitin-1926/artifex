@@ -4,6 +4,7 @@ import { LiveObject } from '@liveblocks/client';
 import { useCanRedo, useCanUndo, useHistory, useMutation, useSelf, useStorage } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
+import useDeleteLayers from '~/hooks/useDeleteLayers';
 import {
 	type Camera,
 	CanvasMode,
@@ -14,9 +15,9 @@ import {
 	type PathLayer,
 	type Point,
 	type RectangleLayer,
-	Side,
+	type Side,
 	type TextLayer,
-	XYWH,
+	type XYWH,
 } from '~/types';
 import {
 	findIntersectingLayers,
@@ -29,7 +30,6 @@ import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
 import SelectionBox from './SelectionBox';
-import useDeleteLayers from '~/hooks/useDeleteLayers';
 
 const MAX_LAYERS = 100;
 
@@ -279,6 +279,7 @@ const Canvas = () => {
 				setIsDragging(true);
 				return;
 			}
+			if (canvasStates.mode === CanvasMode.Inserting) return;
 			if (canvasStates.mode === CanvasMode.Pencil) {
 				startDrawing(point, e.pressure);
 				return;
@@ -336,6 +337,15 @@ const Canvas = () => {
 		}
 	};
 
+	const selectAllLayers = useMutation(
+		({ setMyPresence }) => {
+			if (layerIds) {
+				setMyPresence({ selection: [...layerIds] }, { addToHistory: true });
+			}
+		},
+		[layerIds],
+	);
+
 	// Keyboard shortcuts
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
@@ -355,6 +365,11 @@ const Canvas = () => {
 						} else {
 							history.undo();
 						}
+					}
+					break;
+				case 'a':
+					if (e.ctrlKey || e.metaKey) {
+						selectAllLayers();
 					}
 					break;
 			}
