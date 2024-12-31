@@ -1,7 +1,7 @@
 import { useSelf, useStorage } from '@liveblocks/react';
 import { memo, useEffect, useRef, useState } from 'react';
 import useSelectionBounds from '~/hooks/useSelectionBounds';
-import { LayerType, Side, XYWH } from '~/types';
+import { LayerType, Side, type XYWH } from '~/types';
 
 const handleWidth = 8;
 const handleHeight = 8;
@@ -44,7 +44,7 @@ const SelectionBox = memo(({ onResize }: { onResize: (corner: Side, initialBound
 			<text
 				ref={textRef}
 				style={{ transform: `translate(${bounds.x + bounds.width / 2}px, ${bounds.y + bounds.height + 25}px)` }}
-				className="pointer-events-none fill-white text-[11px]"
+				className="pointer-events-none fill-white text-[11px] select-none"
 				textAnchor="middle"
 			>
 				{Math.round(bounds.width)} x {Math.round(bounds.height)}
