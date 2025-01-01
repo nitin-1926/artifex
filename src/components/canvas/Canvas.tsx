@@ -26,6 +26,7 @@ import {
 	resizeBounds,
 	rgbToHex,
 } from '~/utils';
+import SideBars from '../Sidebars/Sidebars';
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
 import PathLayerComponent from './PathLayerComponent';
@@ -46,6 +47,7 @@ const Canvas = () => {
 	const [canvasStates, setCanvasStates] = useState<CanvasStates>({ mode: CanvasMode.None });
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 	const [isDragging, setIsDragging] = useState(false);
+	const [leftIsMinimized, setLeftIsMinimized] = useState(false);
 
 	const insertLayer = useMutation(
 		(
@@ -455,6 +457,7 @@ const Canvas = () => {
 				canUndo={canUndo}
 				canRedo={canRedo}
 			/>
+			<SideBars leftIsMinimized={leftIsMinimized} setLeftIsMinimized={setLeftIsMinimized} />
 		</div>
 	);
 };
