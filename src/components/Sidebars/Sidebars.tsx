@@ -166,7 +166,7 @@ const SideBars = ({
 			{!leftIsMinimized || layer ? (
 				<div className="fixed bottom-3 right-3 top-3 rounded-xl flex w-[240px] flex-col border-l border-gray-200 bg-white">
 					<div className="flex items-center justify-between pr-2">
-						<div className="max-36 flex w-full gap-2 overflow-x-auto p-3 text-xs">
+						<div className="max-36 flex w-full -space-x-2 overflow-x-auto p-3 text-xs">
 							{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
 							{others.map(other => (
 								<UserAvatar
@@ -356,7 +356,7 @@ const SideBars = ({
 				</div>
 			) : (
 				<div className="fixed right-3 top-3 flex h-[48px] w-[250px] items-center justify-between rounded-xl border bg-white pr-2">
-					<div className="max-36 flex w-full gap-2 overflow-x-auto p-3 text-xs">
+					<div className="max-36 flex w-full -space-x-2 overflow-x-auto p-3 text-xs">
 						{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
 						{others.map(other => (
 							<UserAvatar
