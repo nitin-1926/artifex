@@ -29,6 +29,7 @@ import {
 import SideBars from '../Sidebars/Sidebars';
 import ToolsBar from '../toolsbar/ToolsBar';
 import LayerComponent from './LayerComponent';
+import MultiplayerGuides from './MultiPlayerGuides';
 import PathLayerComponent from './PathLayerComponent';
 import RightClickMenu from './RightClickMenu';
 import SelectionBox from './SelectionBox';
@@ -178,7 +179,7 @@ const Canvas = () => {
 			if (canvasStates.mode !== CanvasMode.Pencil || e.buttons !== 1 || pencilDraft === null) {
 				return;
 			}
-			setMyPresence({ pencilDraft: [...pencilDraft, [point.x, point.y, e.pressure]] });
+			setMyPresence({ cursor: point, pencilDraft: [...pencilDraft, [point.x, point.y, e.pressure]] });
 		},
 		[canvasStates.mode],
 	);
@@ -298,7 +299,7 @@ const Canvas = () => {
 	);
 
 	const handlePointerMove = useMutation(
-		({ storage }, e: React.PointerEvent) => {
+		({ setMyPresence }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
 			if (canvasStates.mode === CanvasMode.Pressing) {
 				startMultiSelection(point, canvasStates.origin);
@@ -320,6 +321,7 @@ const Canvas = () => {
 			} else if (canvasStates.mode === CanvasMode.Translating) {
 				translateSelectedLayer(point);
 			}
+			setMyPresence({ cursor: point });
 		},
 		[
 			camera,
@@ -332,6 +334,10 @@ const Canvas = () => {
 			startMultiSelection,
 		],
 	);
+
+	const handlePointerLeave = useMutation(({ setMyPresence }) => {
+		setMyPresence({ cursor: null });
+	}, []);
 
 	const getCursor = () => {
 		if (canvasStates.mode === CanvasMode.None) {
@@ -401,6 +407,7 @@ const Canvas = () => {
 						onPointerUp={handlePointerUp}
 						onPointerDown={handlePointerDown}
 						onPointerMove={handlePointerMove}
+						onPointerLeave={handlePointerLeave}
 						onContextMenu={e => {
 							e.preventDefault();
 						}}
@@ -434,6 +441,7 @@ const Canvas = () => {
 								/>
 							)}
 						</g>
+						<MultiplayerGuides />
 					</svg>
 				</div>
 			</main>
