@@ -8,7 +8,7 @@ import { signIn, signOut } from '~/server/auth';
 import { db } from '~/server/db';
 
 const logout = async () => {
-	await signOut();
+	await signOut({ redirect: true });
 };
 
 const register = async (prevState: string | undefined, formData: FormData) => {
