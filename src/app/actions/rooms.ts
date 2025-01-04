@@ -24,3 +24,24 @@ export const createRoom = async () => {
 
 	redirect('/dashboard/' + room.id);
 };
+
+export const deleteRoom = async (id: string) => {
+	const session = await auth();
+
+	if (!session?.user.id) throw new Error('No user id found.');
+
+	await db.room.findUniqueOrThrow({
+		where: {
+			id: id,
+			ownerId: session.user.id,
+		},
+	});
+
+	await db.room.delete({
+		where: {
+			id: id,
+		},
+	});
+
+	revalidatePath('/dashboard');
+};
