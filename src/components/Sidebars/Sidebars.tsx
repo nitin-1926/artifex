@@ -9,11 +9,12 @@ import { IoEllipseOutline, IoSquareOutline } from 'react-icons/io5';
 import { PiPathLight, PiSidebarSimpleThin } from 'react-icons/pi';
 import { RiRoundedCorner } from 'react-icons/ri';
 import { type Color, LayerType } from '~/types';
-import { hexToRgb, rgbToHex } from '~/utils';
+import { connectionIdToColor, hexToRgb, rgbToHex } from '~/utils';
 import ColorPicker from './ColorPicker';
 import Dropdown from './Dropdown';
 import LayerButton from './LayerButton';
 import NumberInput from './NumberInput';
+import UserAvatar from './UserAvatar';
 
 const SideBars = ({
 	leftIsMinimized,
@@ -22,6 +23,9 @@ const SideBars = ({
 	leftIsMinimized: boolean;
 	setLeftIsMinimized: (value: boolean) => void;
 }) => {
+	const others = useOthers();
+
+	const me = useSelf();
 	const selectedLayer = useSelf(self => {
 		const selection = self.presence.selection;
 		return selection.length === 1 ? selection[0] : null;
@@ -161,7 +165,19 @@ const SideBars = ({
 			{/* Right Sidebar */}
 			{!leftIsMinimized || layer ? (
 				<div className="fixed bottom-3 right-3 top-3 rounded-xl flex w-[240px] flex-col border-l border-gray-200 bg-white">
-			<div>Right Sidebar</div>
+					<div className="flex items-center justify-between pr-2">
+						<div className="max-36 flex w-full gap-2 overflow-x-auto p-3 text-xs">
+							{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
+							{others.map(other => (
+								<UserAvatar
+									key={other.connectionId}
+									color={connectionIdToColor(other.connectionId)}
+									name={other.info.name}
+								/>
+							))}
+						</div>
+						<p>Share</p>
+					</div>
 					<div className="border-b border-gray-200"></div>
 					{layer ? (
 						<>
@@ -339,7 +355,19 @@ const SideBars = ({
 					)}
 				</div>
 			) : (
-				<></>
+				<div className="fixed right-3 top-3 flex h-[48px] w-[250px] items-center justify-between rounded-xl border bg-white pr-2">
+					<div className="max-36 flex w-full gap-2 overflow-x-auto p-3 text-xs">
+						{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
+						{others.map(other => (
+							<UserAvatar
+								key={other.connectionId}
+								color={connectionIdToColor(other.connectionId)}
+								name={other.info.name}
+							/>
+						))}
+					</div>
+					<p>Share</p>
+				</div>
 			)}
 		</>
 	);

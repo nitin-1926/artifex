@@ -121,3 +121,9 @@ export const findIntersectingLayers = (
 	}
 	return ids;
 };
+
+const COLORS = ['#DC2626', '#D97706', '#059669', '#7C3AED', '#DB2777'];
+
+export function connectionIdToColor(connectionId: number): string {
+	return COLORS[connectionId % COLORS.length]!;
+}
