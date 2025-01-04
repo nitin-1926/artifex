@@ -64,6 +64,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    ownedRooms    Room[] @relation("RoomOwner")
+    roomInvites   RoomInvite[]
 }
 
 model VerificationToken {
@@ -72,4 +74,23 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Room {
+    id          String          @id @default(cuid())
+    owner       User            @relation("RoomOwner", fields: [ownerId], references: [id])
+    ownerId     String
+    title       String          @default("Untitled")
+    createdAt   DateTime        @default(now())
+    roomInvites RoomInvite[]
+}
+
+model RoomInvite {
+    id        String      @id @default(cuid())
+    room      Room        @relation(fields: [roomId], references: [id])
+    roomId    String
+    userId    String
+    user      User        @relation(fields: [userId], references: [id])
+
+    @@index([roomId, userId])
 }
