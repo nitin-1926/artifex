@@ -2,6 +2,7 @@
 
 import { LiveObject } from '@liveblocks/client';
 import { useCanRedo, useCanUndo, useHistory, useMutation, useSelf, useStorage } from '@liveblocks/react';
+import { type User } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
 import useDeleteLayers from '~/hooks/useDeleteLayers';
@@ -36,7 +37,15 @@ import SelectionBox from './SelectionBox';
 
 const MAX_LAYERS = 100;
 
-const Canvas = () => {
+const Canvas = ({
+	roomName,
+	roomId,
+	othersWithAccess,
+}: {
+	roomName: string;
+	roomId: string;
+	othersWithAccess: User[];
+}) => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
 	const pencilDraft = useSelf(self => self.presence.pencilDraft);
@@ -465,7 +474,13 @@ const Canvas = () => {
 				canUndo={canUndo}
 				canRedo={canRedo}
 			/>
-			<SideBars leftIsMinimized={leftIsMinimized} setLeftIsMinimized={setLeftIsMinimized} />
+			<SideBars
+				leftIsMinimized={leftIsMinimized}
+				setLeftIsMinimized={setLeftIsMinimized}
+				roomId={roomId}
+				roomName={roomName}
+				othersWithAccess={othersWithAccess}
+			/>
 		</div>
 	);
 };

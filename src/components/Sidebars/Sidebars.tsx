@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useOthers, useSelf, useStorage } from '@liveblocks/react';
+import { type User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiOutlineFontSize } from 'react-icons/ai';
@@ -15,13 +16,20 @@ import Dropdown from './Dropdown';
 import LayerButton from './LayerButton';
 import NumberInput from './NumberInput';
 import UserAvatar from './UserAvatar';
+import ShareMenu from './ShareMenu';
 
 const SideBars = ({
 	leftIsMinimized,
 	setLeftIsMinimized,
+	roomName,
+	roomId,
+	othersWithAccess,
 }: {
 	leftIsMinimized: boolean;
 	setLeftIsMinimized: (value: boolean) => void;
+	roomName: string;
+	roomId: string;
+	othersWithAccess: User[];
 }) => {
 	const others = useOthers();
 
@@ -99,7 +107,7 @@ const SideBars = ({
 								className="h-5 w-5 cursor-pointer"
 							/>
 						</div>
-						<h2 className="mt-2 scroll-m-20 text-[13px] font-medium">Room name</h2>
+						<h2 className="mt-2 scroll-m-20 text-[13px] font-medium">{roomName}</h2>
 					</div>
 					<div className="border-b border-gray-200" />
 					<div className="flex flex-col gap-1 p-4">
@@ -157,7 +165,7 @@ const SideBars = ({
 					<Link href="/dashboard">
 						<Image src="/artifex-logo.ico" alt="Artifex" width={18} height={18} />
 					</Link>
-					<h2 className="scroll-m-20 text-[13px] font-medium">Room name</h2>
+					<h2 className="scroll-m-20 text-[13px] font-medium">{roomName}</h2>
 					<PiSidebarSimpleThin onClick={() => setLeftIsMinimized(false)} className="h-5 w-5 cursor-pointer" />
 				</div>
 			)}
@@ -176,7 +184,7 @@ const SideBars = ({
 								/>
 							))}
 						</div>
-						<p>Share</p>
+						<ShareMenu roomId={roomId} othersWithAccessToRoom={othersWithAccess} />
 					</div>
 					<div className="border-b border-gray-200"></div>
 					{layer ? (
@@ -366,7 +374,7 @@ const SideBars = ({
 							/>
 						))}
 					</div>
-					<p>Share</p>
+					<ShareMenu roomId={roomId} othersWithAccessToRoom={othersWithAccess} />
 				</div>
 			)}
 		</>

@@ -70,3 +70,56 @@ export const updateRoomTitle = async (id: string, title: string) => {
 
 	revalidatePath('/dashboard');
 };
+
+export const shareRoom = async (id: string, inviteEmail: string) => {
+	const session = await auth();
+
+	if (!session?.user.id) throw new Error('No user id found.');
+
+	await db.room.findUniqueOrThrow({
+		where: {
+			id: id,
+			ownerId: session.user.id,
+		},
+	});
+
+	const invitedUser = await db.user.findUnique({
+		where: { email: inviteEmail },
+		select: { id: true },
+	});
+
+	if (!invitedUser) return 'User not found.';
+
+	await db.roomInvite.create({
+		data: {
+			roomId: id,
+			userId: invitedUser.id,
+		},
+	});
+
+	revalidatePath('/dashboard');
+};
+
+export const deleteRoomInvite = async (id: string, inviteEmail: string) => {
+	const session = await auth();
+
+	if (!session?.user.id) throw new Error('No user id found.');
+
+	await db.room.findUniqueOrThrow({
+		where: {
+			id: id,
+			ownerId: session.user.id,
+		},
+	});
+
+	await db.roomInvite.deleteMany({
+		where: {
+			roomId: id,
+			user: {
+				email: inviteEmail,
+			},
+		},
+	});
+
+	revalidatePath('/dashboard');
+};
