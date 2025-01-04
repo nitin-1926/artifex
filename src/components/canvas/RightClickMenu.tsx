@@ -53,8 +53,8 @@ const RightClickMenu = memo(({ camera }: { camera: Camera }) => {
 	);
 
 	if (!bounds) return null;
-	const x = bounds.width / 2 + bounds.x + camera.x;
-	const y = bounds.y + camera.y;
+	const x = (bounds.width / 2 + bounds.x) * camera.zoom + camera.x;
+	const y = (bounds.y + camera.y) * camera.zoom;
 
 	return (
 		<div
