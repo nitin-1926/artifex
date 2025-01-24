@@ -1,6 +1,5 @@
 import '~/styles/globals.css';
 import { Inter } from 'next/font/google';
-import { GeistSans } from 'geist/font/sans';
 import { type Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -16,8 +15,8 @@ const inter = Inter({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${inter.className}`}>
-			<body className="overflow-hidden overscroll-none">{children}</body>
+		<html lang="en" className={`${inter.className} dark`}>
+			<body className="overflow-hidden overscroll-none dark:bg-black">{children}</body>
 		</html>
 	);
 }

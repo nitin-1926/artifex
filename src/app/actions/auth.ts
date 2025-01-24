@@ -13,9 +13,13 @@ const logout = async () => {
 
 const register = async (prevState: string | undefined, formData: FormData) => {
 	try {
+		const firstName = formData.get('firstName');
+		const lastName = formData.get('lastName');
 		const email = formData.get('email');
 		const password = formData.get('password');
-		const result = await signUpSchema.parseAsync({ email, password });
+
+		const result = await signUpSchema.parseAsync({ firstName, lastName, email, password });
+		const name = `${result.firstName} ${result.lastName}`;
 
 		const user = await db.user.findUnique({
 			where: {
@@ -31,10 +35,13 @@ const register = async (prevState: string | undefined, formData: FormData) => {
 
 		await db.user.create({
 			data: {
+				name,
 				email: result.email,
 				password: hashedPassword,
 			},
 		});
+
+		return 'success';
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			return error.errors.map(err => err.message).join(', ');
