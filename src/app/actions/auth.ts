@@ -52,17 +52,19 @@ const register = async (prevState: string | undefined, formData: FormData) => {
 
 const login = async (prevState: string | undefined, formData: FormData) => {
 	try {
-		await signIn('credentials', formData);
-	} catch (error) {
-		if (error instanceof AuthError) {
-			switch (error.type) {
-				case 'CredentialsSignin':
-					return 'Invalid credentials';
-				default:
-					return 'Something went wrong';
-			}
+		const result = (await signIn('credentials', {
+			...Object.fromEntries(formData),
+			redirect: false,
+		})) as { error?: string };
+
+		if (result?.error) {
+			return 'error';
 		}
-		throw error;
+
+		return 'success';
+	} catch (error) {
+		console.log('error', error);
+		return 'error';
 	}
 };
 
