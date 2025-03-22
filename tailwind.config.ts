@@ -5,14 +5,19 @@ const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenCo
 
 export default {
 	darkMode: ['class'],
-	content: ['./src/**/*.tsx'],
+	content: ['./src/**/*.{ts,tsx}'],
 	theme: {
 		extend: {
+			animation: {
+				spotlight: 'spotlight 2s ease 0.5s 1 forwards',
+			},
 			boxShadow: {
 				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
 			},
 			fontFamily: {
-				sans: ['var(--font-geist-sans)', ...fontFamily.sans],
+				sans: ['var(--font-body)', ...fontFamily.sans],
+				body: ['var(--font-body)', ...fontFamily.sans],
+				display: ['var(--font-display)', ...fontFamily.sans],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
