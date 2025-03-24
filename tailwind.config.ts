@@ -66,6 +66,18 @@ export default {
 					'5': 'hsl(var(--chart-5))',
 				},
 			},
+			keyframes: {
+				spotlight: {
+					'0%': {
+						opacity: '0',
+						transform: 'translate(-72%, -62%) scale(0.55)',
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translate(-50%, -40%) scale(1)',
+					},
+				},
+			},
 		},
 	},
 	plugins: [animate, addVariablesForColors],
