@@ -1,6 +1,7 @@
 import '~/styles/globals.css';
-import { Inter } from 'next/font/google';
+import { Manrope, Syne } from 'next/font/google';
 import { type Metadata } from 'next';
+import { ThemeProvider } from '~/components/providers/theme-provider';
 
 export const metadata: Metadata = {
 	title: 'Artifex',
