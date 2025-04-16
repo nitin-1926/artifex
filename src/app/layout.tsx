@@ -9,15 +9,26 @@ export const metadata: Metadata = {
 	icons: [{ rel: 'icon', url: '/artifex-logo.ico' }],
 };
 
-const inter = Inter({
+const manrope = Manrope({
 	subsets: ['latin'],
 	display: 'swap',
+	variable: '--font-body',
+});
+
+const syne = Syne({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-display',
 });
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${inter.className} dark`}>
-			<body className="overflow-hidden overscroll-none dark:bg-black">{children}</body>
+		<html lang="en" suppressHydrationWarning>
+			<body
+				className={`${manrope.variable} ${syne.variable} min-h-dvh bg-background text-foreground antialiased`}
+			>
+				<ThemeProvider>{children}</ThemeProvider>
+			</body>
 		</html>
 	);
 }
