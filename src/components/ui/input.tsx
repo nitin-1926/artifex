@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
-	const radius = 100; // change this to increase the radius of the hover effect
+	const radius = 130;
 	const [visible, setVisible] = React.useState(false);
 
 	const mouseX = useMotionValue(0);
