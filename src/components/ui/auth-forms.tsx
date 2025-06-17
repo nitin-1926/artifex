@@ -12,16 +12,41 @@ type AuthFormProps = {
 };
 
 const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) => {
+	const isSignup = type === 'signup';
+
+	const content = {
+		signup: {
+			eyebrow: 'Start collaborating',
+			title: 'Create your Artifex workspace.',
+			description:
+				'Set up your account, create rooms, and invite teammates into a cleaner collaborative design workflow.',
+			button: isPending ? 'Creating account...' : 'Create account',
+			switchCopy: 'Already have an account?',
+			switchHref: '/signin',
+			switchLabel: 'Log in',
+		},
+		signin: {
+			eyebrow: 'Welcome back',
+			title: 'Sign in to continue your work.',
+			description:
+				'Open recent rooms, continue editing, and jump back into your shared design process without friction.',
+			button: isPending ? 'Signing in...' : 'Sign in',
+			switchCopy: "Don't have an account?",
+			switchHref: '/signup',
+			switchLabel: 'Create one',
+		},
+	}[type];
+
 	const signUpFields = () => {
 		return (
-			<div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+			<div className="mb-4 flex flex-col gap-4 md:flex-row">
 				<LabelInputContainer>
 					<Label htmlFor="firstName">First name</Label>
-					<Input id="firstName" name="firstName" placeholder="Cristiano" type="text" />
+					<Input id="firstName" name="firstName" placeholder="Ava" type="text" autoComplete="given-name" />
 				</LabelInputContainer>
 				<LabelInputContainer>
 					<Label htmlFor="lastName">Last name</Label>
-					<Input id="lastName" name="lastName" placeholder="Ronaldo" type="text" />
+					<Input id="lastName" name="lastName" placeholder="Morgan" type="text" autoComplete="family-name" />
 				</LabelInputContainer>
 			</div>
 		);
