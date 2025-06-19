@@ -162,12 +162,20 @@ export default AuthForm;
 const BottomGradient = () => {
 	return (
 		<>
-			<span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-			<span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+			<span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),transparent)] opacity-70 transition duration-300 group-hover/btn:opacity-100" />
 		</>
 	);
 };
 
 const LabelInputContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-	return <div className={cn('flex flex-col space-y-2 w-full', className)}>{children}</div>;
+	return <div className={cn('flex w-full flex-col space-y-2', className)}>{children}</div>;
+};
+
+const StatPill = ({ label, value }: { label: string; value: string }) => {
+	return (
+		<div className="rounded-[0.95rem] border border-border/70 bg-background px-4 py-4">
+			<p className="text-[0.68rem] font-medium uppercase tracking-[0.22em] text-muted-foreground">{label}</p>
+			<p className="mt-2 text-sm font-semibold text-foreground">{value}</p>
+		</div>
+	);
 };
