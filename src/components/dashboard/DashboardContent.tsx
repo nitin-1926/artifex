@@ -1,4 +1,5 @@
 import UserMenu from '~/components/dashboard/UserMenu';
+import { ThemeToggle } from '~/components/ui/theme-toggle';
 import { auth } from '~/server/auth';
 import { db } from '~/server/db';
 import CreateRoom from './CreateRoom';
