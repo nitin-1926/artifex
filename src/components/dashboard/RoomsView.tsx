@@ -1,27 +1,31 @@
 'use client';
 
 import { type Room } from '@prisma/client';
+import { ArrowUpRight, Clock3, FolderKanban, Layers3 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { deleteRoom, updateRoomTitle } from '~/app/actions/rooms';
+import { cn } from '~/lib/utils';
 import ConfirmationModal from './ConfirmationModal';
 
-const PASTEL_COLORS = [
-	'rgb(255, 182, 193)', // pink
-	'rgb(176, 224, 230)', // powder blue
-	'rgb(221, 160, 221)', // plum
-	'rgb(188, 143, 143)', // rosy brown
-	'rgb(152, 251, 152)', // pale green
-	'rgb(238, 232, 170)', // pale goldenrod
-	'rgb(230, 230, 250)', // lavender
-	'rgb(255, 218, 185)', // peach
+const ROOM_TONES = [
+	'bg-slate-50 dark:bg-slate-900/70',
+	'bg-blue-50 dark:bg-slate-900/70',
+	'bg-violet-50 dark:bg-slate-900/70',
+	'bg-cyan-50 dark:bg-slate-900/70',
 ];
 
 const ViewModeButton = ({ onSelect, active, text }: { onSelect: () => void; active: boolean; text: string }) => {
 	return (
 		<button
+			type="button"
 			onClick={onSelect}
-			className={`select-none rounded-md p-1 px-2 text-[11px] hover:bg-gray-100 ${active ? 'bg-gray-100' : ''}`}
+			className={cn(
+				'rounded-[0.7rem] px-3 py-1.5 text-[13px] font-medium transition duration-200',
+				active
+					? 'bg-primary text-primary-foreground'
+					: 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground',
+			)}
 		>
 			{text}
 		</button>
