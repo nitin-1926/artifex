@@ -89,31 +89,82 @@ const SingleRoom = ({
 	}, [selected, id, isEditing]);
 
 	return (
-		<div className="flex flex-col gap-0.5">
+		<div className="flex flex-col gap-2.5">
 			<div
-				onDoubleClick={navigateTo}
-				onClick={select}
-				style={{ backgroundColor: color }}
-				className={`flex h-56 w-96 cursor-pointer items-center justify-center rounded-md ${selected ? 'border-2 border-blue-500' : 'border border-[#e8e8e8]'}`}
+				className={cn(
+					'rounded-[0.85rem] border p-[1px] transition duration-200',
+					selected ? 'border-primary/55 shadow-[0_10px_24px_-24px_rgba(37,99,235,0.55)]' : 'border-border/80',
+				)}
 			>
-				<p className="text-md select-none font-medium">{title}</p>
+				<button
+					type="button"
+					onDoubleClick={navigateTo}
+					onClick={select}
+					className={cn(
+						'flex w-full cursor-pointer flex-col gap-4 rounded-[calc(0.85rem-1px)] border border-transparent p-4 text-left transition duration-200',
+						color,
+					)}
+				>
+					<div className="flex items-start justify-between gap-4">
+						<div className="space-y-2">
+							<div className="inline-flex rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+								{canEdit ? 'Owner room' : 'Shared with you'}
+							</div>
+							<div className="space-y-1.5">
+								<h3 className="line-clamp-2 text-lg leading-tight text-foreground">{title}</h3>
+								<p className="text-[13px] text-muted-foreground">{description}</p>
+							</div>
+						</div>
+						<div className="rounded-[0.7rem] border border-border/70 bg-background/80 p-2 text-muted-foreground">
+							<FolderKanban className="h-3.5 w-3.5" />
+						</div>
+					</div>
+					<div className="flex items-center gap-4 text-[11px] text-muted-foreground">
+						<div className="flex items-center gap-2">
+							<Layers3 className="h-3 w-3" />
+							<span>Design file</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<Clock3 className="h-3 w-3" />
+							<span>Ready to open</span>
+						</div>
+					</div>
+				</button>
 			</div>
-			{isEditing && canEdit ? (
-				<input
-					type="text"
-					value={editedTitle}
-					onChange={e => setEditedTitle(e.target.value)}
-					onBlur={handleBlur}
-					onKeyPress={handleKeyPress}
-					autoFocus
-					className="w-full"
-				/>
-			) : (
-				<p onClick={() => setIsEditing(true)} className="mt-2 select-none text-[13px] font-medium">
-					{title}
-				</p>
-			)}
-			<p className="select-none text-[10px] text-gray-400">{description}</p>
+			<div className="flex items-center justify-between gap-3">
+				<div className="min-w-0">
+					{isEditing && canEdit ? (
+						<input
+							type="text"
+							value={editedTitle}
+							onChange={e => setEditedTitle(e.target.value)}
+							onBlur={handleBlur}
+							onKeyDown={handleKeyPress}
+							autoFocus
+							className="w-full rounded-[0.7rem] border border-border/70 bg-background px-3 py-2 text-[13px] font-semibold text-foreground outline-none focus:border-primary"
+						/>
+					) : (
+						<button
+							type="button"
+							onClick={() => canEdit && setIsEditing(true)}
+							className="truncate text-left text-[13px] font-semibold text-foreground transition hover:text-primary"
+						>
+							{title}
+						</button>
+					)}
+					<p className="mt-1 select-none text-[11px] text-muted-foreground">
+						Use the arrow button to open the editor.
+					</p>
+				</div>
+				<button
+					type="button"
+					onClick={navigateTo}
+					className="inline-flex h-8 w-8 items-center justify-center rounded-[0.7rem] border border-border/70 bg-background text-foreground transition hover:border-primary/45 hover:text-primary"
+					aria-label={`Open ${title}`}
+				>
+					<ArrowUpRight className="h-3.5 w-3.5" />
+				</button>
+			</div>
 			<ConfirmationModal
 				isOpen={showConfirmationModal}
 				onClose={() => setShowConfirmationModal(false)}
