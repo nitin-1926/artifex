@@ -193,7 +193,7 @@ const RoomsView = ({ ownedRooms, roomInvites }: { ownedRooms: Room[]; roomInvite
 	const roomColors = useMemo(() => {
 		return filteredRooms.map((room, index) => ({
 			id: room.id,
-			color: PASTEL_COLORS[index % PASTEL_COLORS.length],
+			color: ROOM_TONES[index % ROOM_TONES.length],
 		}));
 	}, [filteredRooms]);
 
