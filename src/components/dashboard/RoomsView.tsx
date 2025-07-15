@@ -209,35 +209,65 @@ const RoomsView = ({ ownedRooms, roomInvites }: { ownedRooms: Room[]; roomInvite
 	}, []);
 
 	return (
-		<div ref={outerDivRef} className="flex flex-col gap-5">
-			<div className="flex gap-1">
-				<ViewModeButton onSelect={() => setViewMode('owns')} active={viewMode === 'owns'} text="My project" />
-				<ViewModeButton
-					onSelect={() => setViewMode('shared')}
-					active={viewMode === 'shared'}
-					text="Shared files"
-				/>
+		<div ref={outerDivRef} className="flex flex-col gap-6">
+			<div className="flex flex-wrap items-center justify-between gap-3">
+				<div className="flex gap-2">
+					<ViewModeButton
+						onSelect={() => setViewMode('owns')}
+						active={viewMode === 'owns'}
+						text="My project"
+					/>
+					<ViewModeButton
+						onSelect={() => setViewMode('shared')}
+						active={viewMode === 'shared'}
+						text="Shared files"
+					/>
+				</div>
+				<div className="flex items-center gap-2 rounded-[0.7rem] border border-border/70 bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
+					<FolderKanban className="h-3.5 w-3.5" />
+					<span>
+						{filteredRooms.length} active room{filteredRooms.length === 1 ? '' : 's'}
+					</span>
+				</div>
 			</div>
-			<div className="flex flex-wrap gap-4">
-				{filteredRooms.map(room => {
-					const roomColor = roomColors.find(rc => rc.id === room.id)?.color ?? PASTEL_COLORS[0]!;
+			{filteredRooms.length === 0 ? (
+				<div className="glass-panel rounded-[0.85rem] px-6 py-10 text-center">
+					<p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+						No rooms yet
+					</p>
+					<h3 className="mt-2 text-xl text-foreground">
+						{viewMode === 'owns'
+							? 'Start your first design room.'
+							: 'Nothing has been shared with you yet.'}
+					</h3>
+					<p className="mx-auto mt-2 max-w-lg text-[13px] leading-6 text-muted-foreground">
+						{viewMode === 'owns'
+							? 'Use the call-to-action above to create a fresh workspace and begin shaping your next artifact.'
+							: 'Once a teammate invites you into a room, it will appear here with the same live collaboration experience.'}
+					</p>
+				</div>
+			) : (
+				<div className="grid gap-5 xl:grid-cols-2">
+					{filteredRooms.map(room => {
+						const roomColor = roomColors.find(rc => rc.id === room.id)?.color ?? ROOM_TONES[0]!;
 
-					return (
-						<React.Fragment key={room.id}>
-							<SingleRoom
-								id={room.id}
-								title={room.title}
-								description={`Created ${room.createdAt.toDateString()}`}
-								color={roomColor}
-								selected={selected === room.id}
-								select={() => setSelected(room.id)}
-								navigateTo={() => router.push('/dashboard/' + room.id)}
-								canEdit={viewMode === 'owns'}
-							/>
-						</React.Fragment>
-					);
-				})}
-			</div>
+						return (
+							<React.Fragment key={room.id}>
+								<SingleRoom
+									id={room.id}
+									title={room.title}
+									description={`Created ${room.createdAt.toDateString()}`}
+									color={roomColor}
+									selected={selected === room.id}
+									select={() => setSelected(room.id)}
+									navigateTo={() => router.push('/dashboard/' + room.id)}
+									canEdit={viewMode === 'owns'}
+								/>
+							</React.Fragment>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 };
