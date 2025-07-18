@@ -1,27 +1,28 @@
 'use client';
 
-import { useState } from 'react';
-import { SlPencil } from 'react-icons/sl';
+import { ArrowRight, Plus } from 'lucide-react';
 import { createRoom } from '~/app/actions/rooms';
 
 const CreateRoom = () => {
-	const [hover, setHover] = useState(false);
-
 	return (
-		<div
-			onMouseOver={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
+		<button
+			type="button"
 			onClick={() => createRoom()}
-			className="flex h-fit w-fit cursor-pointer select-none items-center gap-3 rounded-xl bg-gray-100 px-6 py-5 transition-all hover:bg-blue-500"
+			className="group flex w-full max-w-sm items-center justify-between rounded-[0.8rem] border border-border/80 bg-card px-4 py-3 text-left transition duration-200 hover:border-primary/30 hover:bg-primary/[0.03]"
 		>
-			<div className="flex h-fit w-fit items-center justify-center rounded-full bg-blue-600 p-2">
-				<SlPencil className="h-4 w-4 text-white" />
+			<div className="flex items-center gap-3">
+				<div className="flex h-9 w-9 items-center justify-center rounded-[0.7rem] bg-primary/10 text-primary">
+					<Plus className="h-3.5 w-3.5" />
+				</div>
+				<div className="space-y-0.5">
+					<p className="text-[13px] font-semibold text-foreground">New room</p>
+					<p className="text-[13px] text-muted-foreground">Create a blank collaborative design file.</p>
+				</div>
 			</div>
-			<div className="flex flex-col gap-0.5 text-[11px]">
-				<p className={`font-semibold ${hover ? 'text-white' : 'text-black'}`}>New design file</p>
-				<p className={`${hover ? 'text-white' : 'text-black'}`}>Create a new design</p>
+			<div className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition duration-200 group-hover:text-primary">
+				<ArrowRight className="h-3.5 w-3.5" />
 			</div>
-		</div>
+		</button>
 	);
 };
 
