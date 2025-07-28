@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { BiChevronDown } from 'react-icons/bi';
-import { GoSignOut } from 'react-icons/go';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { logout } from '~/app/actions/auth';
 import UserAvatar from '../Sidebars/UserAvatar';
 
