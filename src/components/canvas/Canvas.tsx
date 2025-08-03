@@ -260,7 +260,7 @@ const Canvas = ({
 	);
 
 	const handlePointerUp = useMutation(
-		({ storage }, e: React.PointerEvent) => {
+		({ storage: _storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
 			if (canvasStates.mode === CanvasMode.RightClick) return;
 			if (canvasStates.mode === CanvasMode.None || canvasStates.mode === CanvasMode.Pressing) {
