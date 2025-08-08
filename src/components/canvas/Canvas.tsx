@@ -290,7 +290,7 @@ const Canvas = ({
 	}, []);
 
 	const handlePointerDown = useMutation(
-		({ storage }, e: React.PointerEvent) => {
+		({ storage: _storage }, e: React.PointerEvent) => {
 			const point = pointerEventToCanvasPoint(e, camera);
 			if (canvasStates.mode === CanvasMode.Dragging) {
 				setCanvasStates({ mode: CanvasMode.Dragging, origin: point });
