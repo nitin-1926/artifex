@@ -401,59 +401,62 @@ const Canvas = ({
 
 		document.addEventListener('keydown', onKeyDown);
 		return () => document.removeEventListener('keydown', onKeyDown);
-	}, [deleteLayers]);
+	}, [deleteLayers, history, selectAllLayers]);
 
 	return (
-		<div className="flex h-screen w-full">
-			<main className="overflow-y-auto fixed left-0 right-0 h-screen">
-				<div
-					style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
-					className={`h-full w-full touch-none cursor-${getCursor()}`}
+		<div
+			style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
+			className={`relative h-screen w-full overflow-hidden bg-grid-mask touch-none cursor-${getCursor()}`}
+		>
+			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.04),transparent_24%)]" />
+			<main className="absolute inset-0">
+				<svg
+					onWheel={handleWheel}
+					onPointerUp={handlePointerUp}
+					onPointerDown={handlePointerDown}
+					onPointerMove={handlePointerMove}
+					onPointerLeave={handlePointerLeave}
+					onContextMenu={e => {
+						e.preventDefault();
+					}}
+					className="h-full w-full"
 				>
-					{canvasStates.mode === CanvasMode.RightClick && <RightClickMenu camera={camera} />}
-					<svg
-						onWheel={handleWheel}
-						onPointerUp={handlePointerUp}
-						onPointerDown={handlePointerDown}
-						onPointerMove={handlePointerMove}
-						onPointerLeave={handlePointerLeave}
-						onContextMenu={e => {
-							e.preventDefault();
-						}}
-						className="h-full w-full"
-					>
-						<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
-							{layerIds?.map(layerId => (
-								<LayerComponent key={layerId} id={layerId} onLayerClick={handleLayerSelection} />
-							))}
-							<SelectionBox onResize={handleResize} />
-							{canvasStates.mode === CanvasMode.SelectionNet && canvasStates.current != null && (
-								<rect
-									className="fill-blue-600/5 stroke-blue-600 stroke-[0.5]"
-									x={Math.min(canvasStates.origin.x, canvasStates.current.x)}
-									y={Math.min(canvasStates.origin.y, canvasStates.current.y)}
-									width={Math.abs(canvasStates.origin.x - canvasStates.current.x)}
-									height={Math.abs(canvasStates.origin.y - canvasStates.current.y)}
-								/>
-							)}
-							{pencilDraft !== null && pencilDraft.length > 0 && (
-								<PathLayerComponent
-									x={0}
-									y={0}
-									fill={{
-										r: 217,
-										g: 217,
-										b: 217,
-									}}
-									opacity={100}
-									points={pencilDraft}
-								/>
-							)}
-						</g>
-						<MultiplayerGuides />
-					</svg>
-				</div>
+					<g style={{ transform: `scale(${camera.zoom}) translate(${camera.x}px, ${camera.y}px)` }}>
+						{layerIds?.map(layerId => (
+							<LayerComponent key={layerId} id={layerId} onLayerClick={handleLayerSelection} />
+						))}
+						<SelectionBox onResize={handleResize} />
+						{canvasStates.mode === CanvasMode.SelectionNet && canvasStates.current != null && (
+							<rect
+								className="fill-blue-600/5 stroke-blue-600 stroke-[0.5]"
+								x={Math.min(canvasStates.origin.x, canvasStates.current.x)}
+								y={Math.min(canvasStates.origin.y, canvasStates.current.y)}
+								width={Math.abs(canvasStates.origin.x - canvasStates.current.x)}
+								height={Math.abs(canvasStates.origin.y - canvasStates.current.y)}
+							/>
+						)}
+						{pencilDraft !== null && pencilDraft.length > 0 && (
+							<PathLayerComponent
+								x={0}
+								y={0}
+								fill={{
+									r: 217,
+									g: 217,
+									b: 217,
+								}}
+								opacity={100}
+								points={pencilDraft}
+							/>
+						)}
+					</g>
+					<MultiplayerGuides />
+				</svg>
 			</main>
+			{canvasStates.mode === CanvasMode.RightClick && (
+				<div className="pointer-events-none absolute inset-0 z-10">
+					<RightClickMenu camera={camera} />
+				</div>
+			)}
 			<ToolsBar
 				canvasStates={canvasStates}
 				setCanvasStates={newState => setCanvasStates(newState)}
