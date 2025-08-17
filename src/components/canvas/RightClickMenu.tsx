@@ -59,18 +59,20 @@ const RightClickMenu = memo(({ camera }: { camera: Camera }) => {
 	return (
 		<div
 			style={{ transform: `translate(calc(${x}px - 50%), calc(${y - 16}px - 100%))` }}
-			className="absolute flex min-w-[150px] flex-col rounded-xl bg-[#1e1e1e] p-2"
+			className="pointer-events-auto absolute flex min-w-[168px] flex-col rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-1.5 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.32)]"
 		>
 			<button
+				type="button"
 				onClick={bringToFront}
-				className="flex w-full items-center justify-center rounded-md px-1 py-1 gap-2 text-white hover:bg-blue-500"
+				className="flex w-full items-center justify-center gap-2 rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6]"
 			>
 				<span className="text-xs">Bring to front</span>
 				<BsArrowDown className="mr-2 h-4 w-4" />
 			</button>
 			<button
+				type="button"
 				onClick={sendToBack}
-				className="flex w-full items-center justify-center rounded-md px-1 py-1 gap-2 text-white hover:bg-blue-500"
+				className="flex w-full items-center justify-center gap-2 rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6]"
 			>
 				<span className="text-xs">Send to back</span>
 				<BsArrowUp className="mr-2 h-4 w-4" />
