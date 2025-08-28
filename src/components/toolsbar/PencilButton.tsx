@@ -3,7 +3,7 @@ import IconButton from './IconButton';
 
 const PencilButton = ({ isActive, onClick }: { isActive: boolean; onClick: () => void }) => {
 	return (
-		<IconButton isActive={isActive} onClick={onClick}>
+		<IconButton isActive={isActive} onClick={onClick} label="Pencil tool">
 			<CiPen className="h-5 w-5" />
 		</IconButton>
 	);
