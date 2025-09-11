@@ -70,9 +70,10 @@ const SelectionButton = ({
 						<span className="text-xs">Move</span>
 					</button>
 					<button
+						type="button"
 						onClick={() => handleClick(CanvasMode.Dragging)}
-						className={`flex items-center w-full rounded-md p-1 text-white hover:bg-blue-500 ${
-							canvasMode === CanvasMode.Dragging ? 'bg-blue-500' : ''
+						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
+							canvasMode === CanvasMode.Dragging ? 'bg-[#eaf2ff] text-[#2563eb]' : ''
 						}`}
 					>
 						<span className="w-5 text-xs">{canvasMode === CanvasMode.Dragging && '✓'}</span>
