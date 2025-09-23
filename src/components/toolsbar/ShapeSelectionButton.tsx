@@ -36,7 +36,12 @@ const ShapeSelectionButton = ({
 
 	return (
 		<div className="relative flex" ref={menuRef}>
-			<IconButton onClick={() => onClick(LayerType.Rectangle)} isActive={isActive} disabled={false}>
+			<IconButton
+				onClick={() => onClick(LayerType.Rectangle)}
+				isActive={isActive}
+				disabled={false}
+				label="Shape tools"
+			>
 				{canvasStates.mode !== CanvasMode.Inserting && <IoSquareOutline className="h-5 w-5" />}
 				{canvasStates.mode === CanvasMode.Inserting &&
 					(canvasStates.layerType === LayerType.Rectangle || canvasStates.layerType === LayerType.Text) && (
