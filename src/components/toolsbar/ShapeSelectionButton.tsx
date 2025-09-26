@@ -79,10 +79,11 @@ const ShapeSelectionButton = ({
 						<span className="text-xs">Rectangle</span>
 					</button>
 					<button
+						type="button"
 						onClick={() => handleClick(LayerType.Ellipse)}
-						className={`flex items-center w-full rounded-md p-1 text-white hover:bg-blue-500 ${
+						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
 							canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Ellipse
-								? 'bg-blue-500'
+								? 'bg-[#eaf2ff] text-[#2563eb]'
 								: ''
 						}`}
 					>
