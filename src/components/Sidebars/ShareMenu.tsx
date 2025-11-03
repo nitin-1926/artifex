@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client';
 import { useState } from 'react';
-import { IoClose } from 'react-icons/io5';
+import { Plus, X } from 'lucide-react';
 import { deleteRoomInvite, shareRoom } from '~/app/actions/rooms';
 import UserAvatar from './UserAvatar';
 
