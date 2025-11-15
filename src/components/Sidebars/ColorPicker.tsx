@@ -64,15 +64,15 @@ const ColorPicker = ({
 				onChange={handleChange}
 				onBlur={handleCommit}
 				onKeyDown={handleKeyDown}
-				className={`h-fit w-full rounded-lg border border-[#f5f5f5] bg-[#f5f5f5] px-2 py-1 pl-6 text-xs hover:border-[#e8e8e8]`}
+				className="h-8 w-full rounded-[0.6rem] border border-[#d7d8dc] bg-[#ffffff] px-3 py-2 pl-8 text-[12px] text-[#111827] outline-none transition hover:border-[#cfd6e4] focus:border-[#93c5fd]"
 			/>
 			<div
 				style={{ backgroundColor: inputValue }}
 				onClick={() => setIsPickerOpen(!isPickerOpen)}
-				className="absolute left-1.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 cursor-pointer rounded"
+				className="absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 cursor-pointer rounded-full border border-[#d7d8dc]"
 			/>
 			{isPickerOpen && (
-				<div className="absolute right-0 z-10 mt-2 -translate-x-[125px]">
+				<div className="absolute right-0 z-10 mt-2 -translate-x-[125px] rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-3 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.32)]">
 					<HexColorPicker color={inputValue} onChange={handleColorChange} />
 				</div>
 			)}
