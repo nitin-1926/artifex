@@ -20,7 +20,8 @@ const LayerButton = ({
 
 	return (
 		<button
-			className={`flex items-center gap-2 rounded px-1.5 py-1 text-left text-[11px] hover:bg-gray-100 ${isSelected ? 'bg-[#bce3ff]' : ''}`}
+			type="button"
+			className={`flex items-center gap-2 rounded-[0.65rem] px-2.5 py-2 text-left text-[12px] transition hover:bg-[#f3f4f6] ${isSelected ? 'bg-[#eaf2ff] text-[#2563eb]' : 'text-[#374151]'}`}
 			onClick={() => updateSelection(layerId)}
 		>
 			{icon}
