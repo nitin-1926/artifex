@@ -32,7 +32,9 @@ const Room = ({ children, roomId }: { children: React.ReactNode; roomId: string 
 								width={50}
 								height={50}
 							/>
-							<h1 className="text-sm font-normal animate-pulse">Loading your artifact...</h1>
+							<h1 className="animate-pulse text-sm font-normal tracking-[0.24em] text-slate-300 uppercase">
+								Loading your artifact
+							</h1>
 						</div>
 					}
 				>
