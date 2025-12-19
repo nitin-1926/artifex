@@ -44,3 +44,9 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# retroactive commit artifacts
+/patches/
+/scripts/
+commits.json
+dates.txt
