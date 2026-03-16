@@ -41,7 +41,7 @@ export async function DashboardContent({ section = 'recents' }: { section?: Dash
 		redirect('/signin');
 	}
 
-	const user = await db.user.findUniqueOrThrow({
+	const user = await db.user.findUnique({
 		where: {
 			id: session.user.id,
 		},
@@ -100,6 +100,9 @@ export async function DashboardContent({ section = 'recents' }: { section?: Dash
 			},
 		},
 	});
+	if (!user) {
+		redirect('/signin');
+	}
 
 	const communityRoomsRaw =
 		section === 'community'
