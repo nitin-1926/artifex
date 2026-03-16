@@ -19,7 +19,7 @@ import UserAvatar from './UserAvatar';
 import ShareMenu from './ShareMenu';
 
 const PANEL_CLASS =
-	'pointer-events-auto flex flex-col rounded-[0.55rem] border border-[#3f3f42] bg-[#252527]/98 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm';
+	'pointer-events-auto flex flex-col rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm';
 
 const SideBars = ({
 	leftIsMinimized,
@@ -176,7 +176,7 @@ const SideBars = ({
 				</div>
 			) : (
 				<div className="pointer-events-none absolute left-0 top-0 z-10 p-2.5">
-					<div className="pointer-events-auto flex h-[44px] w-[228px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527]/98 px-3.5 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
+					<div className="pointer-events-auto flex h-[44px] w-[228px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] px-3.5 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
 						<Link href="/dashboard">
 							<Image src="/artifex-logo.ico" alt="Artifex" width={18} height={18} />
 						</Link>
@@ -403,7 +403,7 @@ const SideBars = ({
 				</div>
 			) : (
 				<div className="pointer-events-none absolute right-0 top-0 z-10 p-2.5">
-					<div className="pointer-events-auto flex h-[44px] w-[272px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527]/98 pr-2 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
+					<div className="pointer-events-auto flex h-[44px] w-[272px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] pr-2 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
 						<div className="max-36 flex w-full -space-x-2 overflow-x-auto p-2 text-xs">
 							{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
 							{others.map(other => (

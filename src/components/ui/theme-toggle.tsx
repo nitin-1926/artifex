@@ -2,16 +2,16 @@
 
 import { motion } from 'framer-motion';
 import { Moon, SunMedium } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { cn } from '~/lib/utils';
 
 export function ThemeToggle({ className }: { className?: string }) {
-	const { resolvedTheme, setTheme } = useTheme();
 	const [mounted, setMounted] = useState(false);
+	const [isDark, setIsDark] = useState(true);
 
 	useEffect(() => {
 		setMounted(true);
+		setIsDark(document.documentElement.classList.contains('dark'));
 	}, []);
 
 	if (!mounted) {
@@ -26,13 +26,18 @@ export function ThemeToggle({ className }: { className?: string }) {
 		);
 	}
 
-	const isDark = resolvedTheme === 'dark';
+	const toggleTheme = () => {
+		const nextIsDark = !isDark;
+		setIsDark(nextIsDark);
+		document.documentElement.classList.toggle('dark', nextIsDark);
+		localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
+	};
 
 	return (
 		<button
 			type="button"
 			aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-			onClick={() => setTheme(isDark ? 'light' : 'dark')}
+			onClick={toggleTheme}
 			className={cn(
 				'relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-[0.55rem] border border-border/85 bg-card/90 text-foreground shadow-[0_8px_20px_-18px_rgba(15,23,42,0.8)] transition duration-200 hover:border-primary/45 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
 				className,

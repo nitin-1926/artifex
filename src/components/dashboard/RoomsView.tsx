@@ -33,7 +33,6 @@ const ViewModeButton = ({ onSelect, active, text }: { onSelect: () => void; acti
 const SingleRoom = ({
 	id,
 	title,
-	description,
 	color,
 	selected,
 	select,
@@ -42,7 +41,6 @@ const SingleRoom = ({
 }: {
 	id: string;
 	title: string;
-	description: string;
 	color: string;
 	selected: boolean;
 	select: () => void;
@@ -247,7 +245,6 @@ const RoomsView = ({ ownedRooms, roomInvites }: { ownedRooms: Room[]; roomInvite
 								<SingleRoom
 									id={room.id}
 									title={room.title}
-									description={`Created ${room.createdAt.toDateString()}`}
 									color={roomColor}
 									selected={selected === room.id}
 									select={() => setSelected(room.id)}
