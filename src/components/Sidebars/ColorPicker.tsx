@@ -64,15 +64,15 @@ const ColorPicker = ({
 				onChange={handleChange}
 				onBlur={handleCommit}
 				onKeyDown={handleKeyDown}
-				className="h-8 w-full rounded-[0.6rem] border border-[#d7d8dc] bg-[#ffffff] px-3 py-2 pl-8 text-[12px] text-[#111827] outline-none transition hover:border-[#cfd6e4] focus:border-[#93c5fd]"
+				className="figma-control w-full pl-8 text-[11px] text-[#f4f4f5]"
 			/>
 			<div
 				style={{ backgroundColor: inputValue }}
 				onClick={() => setIsPickerOpen(!isPickerOpen)}
-				className="absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 cursor-pointer rounded-full border border-[#d7d8dc]"
+				className="absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 cursor-pointer rounded-full border border-[#5a5a5d]"
 			/>
 			{isPickerOpen && (
-				<div className="absolute right-0 z-10 mt-2 -translate-x-[125px] rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-3 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.32)]">
+				<div className="absolute right-0 z-10 mt-2 -translate-x-[125px] rounded-[0.55rem] border border-[#3f3f42] bg-[#262628] p-3 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.72)]">
 					<HexColorPicker color={inputValue} onChange={handleColorChange} />
 				</div>
 			)}

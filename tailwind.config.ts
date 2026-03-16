@@ -17,7 +17,7 @@ export default {
 			fontFamily: {
 				sans: ['var(--font-body)', ...fontFamily.sans],
 				body: ['var(--font-body)', ...fontFamily.sans],
-				display: ['var(--font-display)', ...fontFamily.sans],
+				display: ['var(--font-body)', ...fontFamily.sans],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -8,19 +8,16 @@ const CreateRoom = () => {
 		<button
 			type="button"
 			onClick={() => createRoom()}
-			className="group flex w-full max-w-sm items-center justify-between rounded-[0.8rem] border border-border/80 bg-card px-4 py-3 text-left transition duration-200 hover:border-primary/30 hover:bg-primary/[0.03]"
+			className="group flex h-9 items-center justify-between gap-3 rounded-[0.5rem] border border-white/15 bg-[#2a2a2a] px-3 text-left transition duration-200 hover:border-[#4f8cff]"
 		>
-			<div className="flex items-center gap-3">
-				<div className="flex h-9 w-9 items-center justify-center rounded-[0.7rem] bg-primary/10 text-primary">
-					<Plus className="h-3.5 w-3.5" />
+			<div className="flex items-center gap-2.5">
+				<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] bg-[#3a3a3a] text-[#b8cffd]">
+					<Plus className="h-3 w-3" />
 				</div>
-				<div className="space-y-0.5">
-					<p className="text-[13px] font-semibold text-foreground">New room</p>
-					<p className="text-[13px] text-muted-foreground">Create a blank collaborative design file.</p>
-				</div>
+				<p className="text-[11px] font-medium text-[#f4f4f5]">New file</p>
 			</div>
-			<div className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition duration-200 group-hover:text-primary">
-				<ArrowRight className="h-3.5 w-3.5" />
+			<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] text-[#a1a1aa] transition duration-200 group-hover:text-[#8eb5ff]">
+				<ArrowRight className="h-3 w-3" />
 			</div>
 		</button>
 	);

@@ -19,7 +19,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 			<div
 				aria-hidden="true"
 				className={cn(
-					'h-10 w-10 rounded-full border border-border/60 bg-background/60 backdrop-blur-xl',
+					'h-8 w-8 rounded-[0.55rem] border border-border/80 bg-card/85 backdrop-blur',
 					className,
 				)}
 			/>
@@ -34,7 +34,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 			aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
 			onClick={() => setTheme(isDark ? 'light' : 'dark')}
 			className={cn(
-				'relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border/60 bg-background/70 text-foreground shadow-[0_10px_30px_-18px_rgba(15,23,42,0.65)] backdrop-blur-xl transition duration-300 hover:border-primary/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+				'relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-[0.55rem] border border-border/85 bg-card/90 text-foreground shadow-[0_8px_20px_-18px_rgba(15,23,42,0.8)] transition duration-200 hover:border-primary/45 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
 				className,
 			)}
 		>
@@ -44,7 +44,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 				transition={{ duration: 0.22, ease: 'easeOut' }}
 				className="absolute"
 			>
-				<SunMedium className="h-4 w-4" />
+				<SunMedium className="h-3.5 w-3.5" />
 			</motion.span>
 			<motion.span
 				initial={false}
@@ -52,7 +52,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 				transition={{ duration: 0.22, ease: 'easeOut' }}
 				className="absolute"
 			>
-				<Moon className="h-4 w-4" />
+				<Moon className="h-3.5 w-3.5" />
 			</motion.span>
 		</button>
 	);

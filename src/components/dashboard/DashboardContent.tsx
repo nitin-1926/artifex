@@ -23,76 +23,68 @@ export async function DashboardContent() {
 	});
 
 	return (
-		<div className="relative min-h-screen">
-			<div className="bg-grid-mask pointer-events-none absolute inset-0 opacity-20" />
-			<div className="relative mx-auto flex min-h-screen max-w-[1360px] gap-3 p-3 lg:p-4">
-				<aside className="glass-panel hidden w-[280px] shrink-0 rounded-[0.85rem] p-4 lg:flex lg:flex-col">
-					<div className="flex items-center justify-between">
-						<div>
-							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-								Artifex
-							</p>
-							<h1 className="mt-1.5 text-xl text-foreground">Workspace</h1>
-						</div>
-						<ThemeToggle />
-					</div>
-					<div className="mt-6">
-						<UserMenu email={user.email} />
-					</div>
-					<div className="mt-8 space-y-3">
-						<div className="rounded-[0.8rem] border border-border/70 bg-card p-4">
-							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-								Rooms
-							</p>
-							<p className="mt-2 text-2xl text-foreground">
-								{user.ownedRooms.length + user.roomInvites.length}
-							</p>
-							<p className="mt-1.5 text-[13px] leading-5 text-muted-foreground">
-								Accessible across your personal and shared workspace.
-							</p>
-						</div>
-						<div className="rounded-[0.8rem] border border-border/70 bg-card p-4">
-							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-								Environment
-							</p>
-							<p className="mt-2 text-[15px] font-semibold text-foreground">Premium SaaS shell</p>
-							<p className="mt-1.5 text-[13px] leading-5 text-muted-foreground">
-								Clean navigation, quieter surfaces, and a stronger workspace hierarchy.
-							</p>
-						</div>
-					</div>
-				</aside>
-				<main className="glass-panel relative flex min-h-[calc(100dvh-1.5rem)] flex-1 flex-col overflow-hidden rounded-[0.85rem]">
-					<div className="flex flex-col gap-4 border-b border-border/70 px-5 py-5 sm:px-6">
-						<div className="flex items-start justify-between gap-4 lg:hidden">
+		<div className="min-h-screen bg-[#1f1f1f] text-[#f5f5f5]">
+			<div className="mx-auto flex min-h-screen max-w-[1520px]">
+				<aside className="hidden w-[236px] shrink-0 border-r border-white/10 bg-[#252526] px-3 py-3 lg:flex lg:flex-col">
+					<div className="mb-3 rounded-[0.6rem] border border-white/10 bg-[#2b2b2b] p-3">
+						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-									Artifex
-								</p>
-								<h1 className="mt-1.5 text-xl text-foreground">Workspace</h1>
+								<p className="text-[10px] uppercase tracking-[0.09em] text-[#b6b6b6]">Artifex</p>
+								<h1 className="mt-1 text-[13px] font-medium text-[#f4f4f5]">Workspace</h1>
 							</div>
 							<ThemeToggle />
 						</div>
-						<div className="lg:hidden">
+						<div className="mt-3">
 							<UserMenu email={user.email} />
 						</div>
-						<div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-							<div className="max-w-2xl">
-								<p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-									Dashboard
-								</p>
-								<h2 className="mt-1.5 text-[1.8rem] leading-tight text-foreground sm:text-[2.1rem]">
-									Recent rooms and collaborative files.
-								</h2>
-								<p className="mt-2 max-w-xl text-[14px] leading-6 text-muted-foreground">
-									Create a new room, open existing work, and move between personal and shared files in
-									a calmer workspace shell.
-								</p>
-							</div>
-							<CreateRoom />
+					</div>
+					<div className="figma-section-label px-2">Main</div>
+					<nav className="mt-2 flex flex-col gap-1">
+						<button
+							type="button"
+							className="rounded-[0.5rem] bg-[#3a3a3a] px-3 py-2 text-left text-[12px] text-[#f5f5f5]"
+						>
+							Recents
+						</button>
+						<button
+							type="button"
+							className="rounded-[0.5rem] px-3 py-2 text-left text-[12px] text-[#b6b6b6] transition hover:bg-[#2f2f2f] hover:text-white"
+						>
+							Community
+						</button>
+						<button
+							type="button"
+							className="rounded-[0.5rem] px-3 py-2 text-left text-[12px] text-[#b6b6b6] transition hover:bg-[#2f2f2f] hover:text-white"
+						>
+							Shared with me
+						</button>
+					</nav>
+					<div className="mt-4 space-y-2">
+						<div className="rounded-[0.6rem] border border-white/10 bg-[#2b2b2b] px-3 py-2.5">
+							<p className="text-[10px] uppercase tracking-[0.09em] text-[#a1a1aa]">Rooms</p>
+							<p className="mt-1 text-[18px] text-white">{user.ownedRooms.length + user.roomInvites.length}</p>
 						</div>
 					</div>
-					<div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6">
+				</aside>
+				<main className="flex min-h-screen flex-1 flex-col bg-[#1f1f1f]">
+					<header className="border-b border-white/10 px-4 py-4 sm:px-6">
+						<div className="flex flex-wrap items-center justify-between gap-3">
+							<div>
+								<p className="text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">Recents</p>
+								<h2 className="mt-1 text-[20px] font-medium text-[#f4f4f5]">Collaborative files</h2>
+							</div>
+							<div className="flex items-center gap-2">
+								<div className="lg:hidden">
+									<ThemeToggle />
+								</div>
+								<CreateRoom />
+							</div>
+						</div>
+						<p className="mt-2 text-[12px] text-[#a1a1aa]">
+							Open recent rooms, organize drafts, and jump into the editor.
+						</p>
+					</header>
+					<div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6">
 						<RoomsView ownedRooms={user.ownedRooms} roomInvites={user.roomInvites.map(x => x.room)} />
 					</div>
 				</main>

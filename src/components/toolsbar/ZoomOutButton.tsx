@@ -4,7 +4,7 @@ import IconButton from './IconButton';
 const ZoomOutButton = ({ onClick, disabled }: { onClick: () => void; disabled?: boolean }) => {
 	return (
 		<IconButton onClick={onClick} disabled={disabled} label="Zoom out">
-			<AiOutlineZoomOut size={20} />
+			<AiOutlineZoomOut size={16} />
 		</IconButton>
 	);
 };

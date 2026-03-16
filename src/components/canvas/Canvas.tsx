@@ -405,10 +405,10 @@ const Canvas = ({
 
 	return (
 		<div
-			style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
-			className={`relative h-screen w-full overflow-hidden bg-grid-mask touch-none cursor-${getCursor()}`}
+			style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#eceef2' }}
+			className={`relative h-screen w-full overflow-hidden touch-none cursor-${getCursor()}`}
 		>
-			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.04),transparent_24%)]" />
+			<div className="pointer-events-none absolute inset-0 bg-grid-mask opacity-45" />
 			<main className="absolute inset-0">
 				<svg
 					onWheel={handleWheel}

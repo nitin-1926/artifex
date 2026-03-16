@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
 				background: useMotionTemplate`
 					radial-gradient(
 						${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-						hsl(var(--primary) / 0.38),
+						hsl(var(--primary) / 0.24),
 						transparent 80%
     				)
     `,
@@ -35,12 +35,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
 			onMouseMove={handleMouseMove}
 			onMouseEnter={() => setVisible(true)}
 			onMouseLeave={() => setVisible(false)}
-			className="group/input rounded-[1.15rem] p-[1px] transition duration-300"
+			className="group/input rounded-[0.5rem] p-[1px] transition duration-300"
 		>
 			<input
 				type={type}
 				className={cn(
-					`flex h-12 w-full rounded-[calc(var(--radius)-0.15rem)] border border-border/70 bg-background/80 px-4 py-3 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition duration-300 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 group-hover/input:border-primary/35 group-hover/input:shadow-none dark:bg-white/[0.03]
+					`flex h-9 w-full rounded-[calc(var(--radius)-0.12rem)] border border-[#4a4a4c] bg-[#2d2d2f] px-3 py-2 text-[12px] text-[#f4f4f5] transition duration-300 file:border-0 file:bg-transparent file:text-[12px] file:font-medium placeholder:text-[#8a8a8e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d8dff]/40 disabled:cursor-not-allowed disabled:opacity-50 group-hover/input:border-[#5d8dff]/45 group-hover/input:shadow-none
         `,
 					className,
 				)}
