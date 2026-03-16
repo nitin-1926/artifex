@@ -36,7 +36,12 @@ const ShapeSelectionButton = ({
 
 	return (
 		<div className="relative flex" ref={menuRef}>
-			<IconButton onClick={() => onClick(LayerType.Rectangle)} isActive={isActive} disabled={false}>
+			<IconButton
+				onClick={() => onClick(LayerType.Rectangle)}
+				isActive={isActive}
+				disabled={false}
+				label="Shape tools"
+			>
 				{canvasStates.mode !== CanvasMode.Inserting && <IoSquareOutline className="h-5 w-5" />}
 				{canvasStates.mode === CanvasMode.Inserting &&
 					(canvasStates.layerType === LayerType.Rectangle || canvasStates.layerType === LayerType.Text) && (
@@ -46,16 +51,22 @@ const ShapeSelectionButton = ({
 					<IoEllipseOutline className="h-5 w-5" />
 				)}
 			</IconButton>
-			<button onClick={() => setIsOpen(!isOpen)} className="ml-1 rotate-180">
+			<button
+				type="button"
+				aria-label="Open shape tool menu"
+				onClick={() => setIsOpen(!isOpen)}
+				className="ml-1 rotate-180 rounded-[0.5rem] p-1 text-[#6b7280] transition hover:bg-[#eceef2] hover:text-[#111827] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+			>
 				<BiChevronDown className="h-5 w-5" />
 			</button>
 			{isOpen && (
-				<div className="absolute -top-20 mt-1 min-w-[150px] rounded-xl bg-[#1e1e1e] p-2 shadow-lg flex flex-col gap-2 z-10">
+				<div className="absolute -top-24 z-20 mt-1 flex min-w-[170px] flex-col gap-1 rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-1.5 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.32)]">
 					<button
+						type="button"
 						onClick={() => handleClick(LayerType.Rectangle)}
-						className={`flex items-center w-full rounded-md p-1 text-white hover:bg-blue-500 ${
+						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
 							canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Rectangle
-								? 'bg-blue-500'
+								? 'bg-[#eaf2ff] text-[#2563eb]'
 								: ''
 						}`}
 					>
@@ -68,10 +79,11 @@ const ShapeSelectionButton = ({
 						<span className="text-xs">Rectangle</span>
 					</button>
 					<button
+						type="button"
 						onClick={() => handleClick(LayerType.Ellipse)}
-						className={`flex items-center w-full rounded-md p-1 text-white hover:bg-blue-500 ${
+						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
 							canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Ellipse
-								? 'bg-blue-500'
+								? 'bg-[#eaf2ff] text-[#2563eb]'
 								: ''
 						}`}
 					>

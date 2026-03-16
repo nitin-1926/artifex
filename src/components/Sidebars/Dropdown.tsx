@@ -28,7 +28,7 @@ const Dropdown = ({
 			<select
 				value={selectedValue}
 				onChange={handleChange}
-				className="w-full rounded-lg border border-[#e8e8e8] bg-[#f5f5f5] px-2 py-1 text-xs hover:bg-[#e8e8e8]"
+				className="h-8 w-full rounded-[0.6rem] border border-[#d7d8dc] bg-[#ffffff] px-3 py-2 text-[12px] text-[#111827] outline-none transition hover:border-[#cfd6e4] focus:border-[#93c5fd]"
 			>
 				{options.map(option => (
 					<option key={option} value={option}>

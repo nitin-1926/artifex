@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
-	const radius = 100; // change this to increase the radius of the hover effect
+	const radius = 130;
 	const [visible, setVisible] = React.useState(false);
 
 	const mouseX = useMotionValue(0);
@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
 				background: useMotionTemplate`
 					radial-gradient(
 						${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-						var(--blue-500),
+						hsl(var(--primary) / 0.38),
 						transparent 80%
     				)
     `,
@@ -35,17 +35,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
 			onMouseMove={handleMouseMove}
 			onMouseEnter={() => setVisible(true)}
 			onMouseLeave={() => setVisible(false)}
-			className="p-[2px] rounded-lg transition duration-300 group/input"
+			className="group/input rounded-[1.15rem] p-[1px] transition duration-300"
 		>
 			<input
 				type={type}
 				className={cn(
-					`flex h-10 w-full border-none bg-gray-50 dark:bg-zinc-800 text-black dark:text-white shadow-input rounded-md px-3 py-2 text-sm  file:border-0 file:bg-transparent 
-					file:text-sm file:font-medium placeholder:text-neutral-400 dark:placeholder-text-neutral-600 
-					focus-visible:outline-none focus-visible:ring-[2px]  focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600
-					disabled:cursor-not-allowed disabled:opacity-50
-					dark:shadow-[0px_0px_1px_1px_var(--neutral-700)]
-					group-hover/input:shadow-none transition duration-400
+					`flex h-12 w-full rounded-[calc(var(--radius)-0.15rem)] border border-border/70 bg-background/80 px-4 py-3 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition duration-300 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 group-hover/input:border-primary/35 group-hover/input:shadow-none dark:bg-white/[0.03]
         `,
 					className,
 				)}

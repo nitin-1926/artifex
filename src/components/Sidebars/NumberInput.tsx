@@ -55,15 +55,15 @@ const NumberInput = ({
 				onKeyDown={handleKeyDown}
 				min={min}
 				max={max}
-				className={`h-fit w-full rounded-lg border border-[#f5f5f5] bg-[#f5f5f5] px-2 py-1 pl-6 text-xs hover:border-[#e8e8e8]`}
+				className="h-8 w-full rounded-[0.6rem] border border-[#d7d8dc] bg-[#ffffff] px-3 py-2 pl-8 text-[12px] text-[#111827] outline-none transition hover:border-[#cfd6e4] focus:border-[#93c5fd]"
 			/>
 			{React.isValidElement(icon) && icon.type === 'p' ? (
-				<p className="absolute left-2 top-[50%] -translate-y-1/2 text-[10px] text-gray-400">
+				<p className="absolute left-3 top-[50%] -translate-y-1/2 text-[10px] font-medium text-[#9ca3af]">
 					{(icon as React.ReactElement<{ children: React.ReactNode }>).props.children}
 				</p>
 			) : (
 				React.cloneElement(icon as React.ReactElement, {
-					className: 'absolute left-1.5 top-[50%] h-3 w-3 -translate-y-1/2 text-gray-400',
+					className: 'absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 text-[#9ca3af]',
 				})
 			)}
 		</div>

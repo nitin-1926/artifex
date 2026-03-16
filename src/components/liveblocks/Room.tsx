@@ -24,7 +24,7 @@ const Room = ({ children, roomId }: { children: React.ReactNode; roomId: string 
 			>
 				<ClientSideSuspense
 					fallback={
-						<div className="flex justify-center items-center h-screen flex-col gap-2">
+						<div className="bg-grid-mask flex h-screen flex-col items-center justify-center gap-3 bg-slate-950 text-white">
 							<Image
 								className="h-[50px] w-[50px] animate-bounce"
 								src="/artifex-logo.ico"
@@ -32,7 +32,9 @@ const Room = ({ children, roomId }: { children: React.ReactNode; roomId: string 
 								width={50}
 								height={50}
 							/>
-							<h1 className="text-sm font-normal animate-pulse">Loading your artifact...</h1>
+							<h1 className="animate-pulse text-sm font-normal tracking-[0.24em] text-slate-300 uppercase">
+								Loading your artifact
+							</h1>
 						</div>
 					}
 				>
