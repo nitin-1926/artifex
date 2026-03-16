@@ -8,15 +8,15 @@ const CreateRoom = () => {
 		<button
 			type="button"
 			onClick={() => createRoom()}
-			className="group flex h-9 items-center justify-between gap-3 rounded-[0.5rem] border border-white/15 bg-[#2a2a2a] px-3 text-left transition duration-200 hover:border-[#4f8cff]"
+			className="group flex h-9 items-center justify-between gap-3 rounded-[0.5rem] border border-border bg-card px-3 text-left transition duration-200 hover:border-primary/45"
 		>
 			<div className="flex items-center gap-2.5">
-				<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] bg-[#3a3a3a] text-[#b8cffd]">
+				<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] bg-primary/15 text-primary">
 					<Plus className="h-3 w-3" />
 				</div>
-				<p className="text-[11px] font-medium text-[#f4f4f5]">New file</p>
+				<p className="text-[11px] font-medium text-foreground">New file</p>
 			</div>
-			<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] text-[#a1a1aa] transition duration-200 group-hover:text-[#8eb5ff]">
+			<div className="flex h-6 w-6 items-center justify-center rounded-[0.45rem] text-muted-foreground transition duration-200 group-hover:text-primary">
 				<ArrowRight className="h-3 w-3" />
 			</div>
 		</button>

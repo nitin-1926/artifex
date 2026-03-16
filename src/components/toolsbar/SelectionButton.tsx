@@ -52,17 +52,17 @@ const SelectionButton = ({
 				type="button"
 				aria-label="Open selection tool menu"
 				onClick={() => setIsOpen(!isOpen)}
-				className="ml-1 rotate-180 rounded-[0.4rem] p-1 text-[#9ca3af] transition hover:bg-[#343436] hover:text-[#f4f4f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d8dff]/45"
+				className="ml-1 rotate-180 rounded-[0.4rem] p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
 			>
 				<BiChevronDown className="h-4 w-4" />
 			</button>
 			{isOpen && (
-				<div className="absolute -top-24 z-20 mt-1 flex min-w-[164px] flex-col gap-1 rounded-[0.55rem] border border-[#3f3f42] bg-[#262628] p-1 shadow-[0_16px_36px_-28px_rgba(0,0,0,0.72)]">
+				<div className="absolute -top-24 z-20 mt-1 flex min-w-[164px] flex-col gap-1 rounded-[0.55rem] border border-border bg-card p-1 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.55)]">
 					<button
 						type="button"
 						onClick={() => handleClick(CanvasMode.None)}
-						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-[#d4d4d8] transition hover:bg-[#343436] ${
-							canvasMode === CanvasMode.None ? 'bg-[#2f4773] text-[#d6e5ff]' : ''
+						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-foreground transition hover:bg-muted ${
+							canvasMode === CanvasMode.None ? 'bg-primary/15 text-primary' : ''
 						}`}
 					>
 						<span className="w-5 text-[10px]">{canvasMode === CanvasMode.None && '✓'}</span>
@@ -72,8 +72,8 @@ const SelectionButton = ({
 					<button
 						type="button"
 						onClick={() => handleClick(CanvasMode.Dragging)}
-						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-[#d4d4d8] transition hover:bg-[#343436] ${
-							canvasMode === CanvasMode.Dragging ? 'bg-[#2f4773] text-[#d6e5ff]' : ''
+						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-foreground transition hover:bg-muted ${
+							canvasMode === CanvasMode.Dragging ? 'bg-primary/15 text-primary' : ''
 						}`}
 					>
 						<span className="w-5 text-[10px]">{canvasMode === CanvasMode.Dragging && '✓'}</span>

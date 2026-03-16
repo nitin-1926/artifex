@@ -55,15 +55,15 @@ const NumberInput = ({
 				onKeyDown={handleKeyDown}
 				min={min}
 				max={max}
-				className="figma-control w-full pl-8 text-[11px] text-[#f4f4f5]"
+				className="figma-control w-full pl-8 text-[11px] text-foreground"
 			/>
 			{React.isValidElement(icon) && icon.type === 'p' ? (
-				<p className="absolute left-3 top-[50%] -translate-y-1/2 text-[10px] font-medium text-[#9a9a9d]">
+				<p className="absolute left-3 top-[50%] -translate-y-1/2 text-[10px] font-medium text-muted-foreground">
 					{(icon as React.ReactElement<{ children: React.ReactNode }>).props.children}
 				</p>
 			) : (
 				React.cloneElement(icon as React.ReactElement, {
-					className: 'absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 text-[#9a9a9d]',
+					className: 'absolute left-2.5 top-[50%] h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground',
 				})
 			)}
 		</div>

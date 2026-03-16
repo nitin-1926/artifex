@@ -1,9 +1,10 @@
 'use client';
 
 import { useMutation, useOthers, useSelf, useStorage } from '@liveblocks/react';
-import { type User } from '@prisma/client';
-import Image from 'next/image';
+import { RoomVisibility, type User } from '@prisma/client';
 import Link from 'next/link';
+import { ArrowLeft, Download, Image as ImageIcon, ImageDown } from 'lucide-react';
+import { useState } from 'react';
 import { AiOutlineFontSize } from 'react-icons/ai';
 import { BsCircleHalf } from 'react-icons/bs';
 import { IoEllipseOutline, IoSquareOutline } from 'react-icons/io5';
@@ -19,7 +20,7 @@ import UserAvatar from './UserAvatar';
 import ShareMenu from './ShareMenu';
 
 const PANEL_CLASS =
-	'pointer-events-auto flex flex-col rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm';
+	'pointer-events-auto flex h-full flex-col border border-border bg-card text-foreground';
 
 const SideBars = ({
 	leftIsMinimized,
@@ -27,14 +28,25 @@ const SideBars = ({
 	roomName,
 	roomId,
 	othersWithAccess,
+	roomOwner,
+	roomVisibility,
+	canManageRoom,
+	onVisibilityChange,
+	onExport,
 }: {
 	leftIsMinimized: boolean;
 	setLeftIsMinimized: (value: boolean) => void;
 	roomName: string;
 	roomId: string;
 	othersWithAccess: User[];
+	roomOwner: Pick<User, 'id' | 'email' | 'name'>;
+	roomVisibility: RoomVisibility;
+	canManageRoom: boolean;
+	onVisibilityChange: (visibility: RoomVisibility) => void;
+	onExport: (format: 'png' | 'jpeg') => void;
 }) => {
 	const others = useOthers();
+	const [showExportMenu, setShowExportMenu] = useState(false);
 
 	const me = useSelf();
 	const selectedLayer = useSelf(self => {
@@ -99,30 +111,34 @@ const SideBars = ({
 		<>
 			{/* Left Sidebar */}
 			{!leftIsMinimized ? (
-				<div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex p-2.5">
-					<div className={`${PANEL_CLASS} w-[228px]`}>
-						<div className="p-3.5">
+				<div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex">
+					<div className={`${PANEL_CLASS} w-[240px] border-l-0`}>
+						<div className="p-3">
 							<div className="flex justify-between">
-								<Link href="/dashboard">
-									<Image src="/artifex-logo.ico" alt="Artifex" width={18} height={18} />
+								<Link
+									href="/dashboard"
+									className="inline-flex h-8 w-8 items-center justify-center rounded-[0.45rem] border border-border bg-background text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+									aria-label="Back to dashboard"
+								>
+									<ArrowLeft className="h-4 w-4" />
 								</Link>
 								<button
 									type="button"
 									aria-label="Collapse left sidebar"
 									onClick={() => setLeftIsMinimized(true)}
-									className="rounded-[0.45rem] p-1 text-[#a1a1aa] transition hover:bg-[#343436] hover:text-[#f4f4f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d8dff]/45"
+									className="rounded-[0.45rem] p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
 								>
 									<PiSidebarSimpleThin className="h-4 w-4" />
 								</button>
 							</div>
-							<p className="mt-4 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+							<p className="mt-4 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 								Canvas room
 							</p>
-							<h2 className="mt-1.5 scroll-m-20 text-[12px] font-medium text-[#f4f4f5]">{roomName}</h2>
+							<h2 className="mt-1.5 scroll-m-20 text-[12px] font-medium text-foreground">{roomName}</h2>
 						</div>
-						<div className="border-b border-[#3b3b3e]" />
+						<div className="border-b border-border" />
 						<div className="flex flex-col gap-1 p-2.5">
-							<span className="mb-1.5 px-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+							<span className="mb-1.5 px-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 								Layers
 							</span>
 							{layerIds &&
@@ -136,7 +152,7 @@ const SideBars = ({
 												layerId={id}
 												text="Rectangle"
 												isSelected={isSelected ?? false}
-												icon={<IoSquareOutline className="h-3 w-3 text-[#b1b1b5]" />}
+												icon={<IoSquareOutline className="h-3 w-3 text-muted-foreground" />}
 											/>
 										);
 									} else if (layer?.type === LayerType.Ellipse) {
@@ -146,7 +162,7 @@ const SideBars = ({
 												layerId={id}
 												text="Ellipse"
 												isSelected={isSelected ?? false}
-												icon={<IoEllipseOutline className="h-3 w-3 text-[#b1b1b5]" />}
+												icon={<IoEllipseOutline className="h-3 w-3 text-muted-foreground" />}
 											/>
 										);
 									} else if (layer?.type === LayerType.Path) {
@@ -156,7 +172,7 @@ const SideBars = ({
 												layerId={id}
 												text="Drawing"
 												isSelected={isSelected ?? false}
-												icon={<PiPathLight className="h-3 w-3 text-[#b1b1b5]" />}
+												icon={<PiPathLight className="h-3 w-3 text-muted-foreground" />}
 											/>
 										);
 									} else if (layer?.type === LayerType.Text) {
@@ -166,7 +182,7 @@ const SideBars = ({
 												layerId={id}
 												text="Text"
 												isSelected={isSelected ?? false}
-												icon={<AiOutlineFontSize className="h-3 w-3 text-[#b1b1b5]" />}
+												icon={<AiOutlineFontSize className="h-3 w-3 text-muted-foreground" />}
 											/>
 										);
 									}
@@ -175,17 +191,21 @@ const SideBars = ({
 					</div>
 				</div>
 			) : (
-				<div className="pointer-events-none absolute left-0 top-0 z-10 p-2.5">
-					<div className="pointer-events-auto flex h-[44px] w-[228px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] px-3.5 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
-						<Link href="/dashboard">
-							<Image src="/artifex-logo.ico" alt="Artifex" width={18} height={18} />
+				<div className="pointer-events-none absolute left-0 top-0 z-10">
+					<div className="pointer-events-auto flex h-[44px] w-[240px] items-center justify-between border-b border-r border-border bg-card px-3.5 text-foreground">
+						<Link
+							href="/dashboard"
+							className="inline-flex h-8 w-8 items-center justify-center rounded-[0.45rem] border border-border bg-background text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+							aria-label="Back to dashboard"
+						>
+							<ArrowLeft className="h-4 w-4" />
 						</Link>
 						<h2 className="scroll-m-20 text-[12px] font-medium">{roomName}</h2>
 						<button
 							type="button"
 							aria-label="Expand left sidebar"
 							onClick={() => setLeftIsMinimized(false)}
-							className="rounded-[0.45rem] p-1 text-[#a1a1aa] transition hover:bg-[#343436] hover:text-[#f4f4f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d8dff]/45"
+							className="rounded-[0.45rem] p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
 						>
 							<PiSidebarSimpleThin className="h-4 w-4" />
 						</button>
@@ -195,9 +215,9 @@ const SideBars = ({
 
 			{/* Right Sidebar */}
 			{!leftIsMinimized || layer ? (
-				<div className="pointer-events-none absolute inset-y-0 right-0 z-10 flex p-2.5">
-					<div className={`${PANEL_CLASS} w-[272px]`}>
-						<div className="flex items-center justify-between gap-2 px-3 py-2.5">
+				<div className="pointer-events-none absolute inset-y-0 right-0 z-10 flex">
+					<div className={`${PANEL_CLASS} w-[296px] border-r-0`}>
+						<div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2.5">
 							<div className="max-36 flex w-full -space-x-2 overflow-x-auto p-2 text-xs">
 								{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
 								{others.map(other => (
@@ -208,17 +228,60 @@ const SideBars = ({
 									/>
 								))}
 							</div>
-							<ShareMenu roomId={roomId} othersWithAccessToRoom={othersWithAccess} />
+							<div className="relative flex items-center gap-1.5">
+								<button
+									type="button"
+									onClick={() => setShowExportMenu(prev => !prev)}
+									className="inline-flex h-7 w-7 items-center justify-center rounded-[0.45rem] border border-border bg-background text-muted-foreground transition hover:border-primary/50 hover:text-primary"
+									aria-label="Export design"
+								>
+									<Download className="h-3.5 w-3.5" />
+								</button>
+								{showExportMenu && (
+									<div className="absolute right-0 top-[calc(100%+0.35rem)] z-30 flex w-[136px] flex-col gap-1 rounded-[0.5rem] border border-border bg-card p-1 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.65)]">
+										<button
+											type="button"
+											onClick={() => {
+												onExport('png');
+												setShowExportMenu(false);
+											}}
+											className="flex items-center gap-2 rounded-[0.45rem] px-2 py-1.5 text-[11px] text-foreground transition hover:bg-muted"
+										>
+											<ImageDown className="h-3.5 w-3.5" />
+											Export PNG
+										</button>
+										<button
+											type="button"
+											onClick={() => {
+												onExport('jpeg');
+												setShowExportMenu(false);
+											}}
+											className="flex items-center gap-2 rounded-[0.45rem] px-2 py-1.5 text-[11px] text-foreground transition hover:bg-muted"
+										>
+											<ImageIcon className="h-3.5 w-3.5" />
+											Export JPEG
+										</button>
+									</div>
+								)}
+								{canManageRoom && (
+									<ShareMenu
+										roomId={roomId}
+										roomName={roomName}
+										roomVisibility={roomVisibility}
+										owner={roomOwner}
+										othersWithAccessToRoom={othersWithAccess}
+									/>
+								)}
+							</div>
 						</div>
-						<div className="border-b border-[#3b3b3e]" />
 						{layer ? (
 							<>
 								<div className="flex flex-col gap-2 p-3.5">
-									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 										Position
 									</span>
 									<div className="flex flex-col gap-1">
-										<p className="text-[10px] font-medium text-[#9a9a9d]">Position</p>
+										<p className="text-[10px] font-medium text-muted-foreground">Position</p>
 										<div className="flex w-full gap-2">
 											<NumberInput
 												value={layer.x}
@@ -242,13 +305,13 @@ const SideBars = ({
 
 								{layer.type !== LayerType.Path && (
 									<>
-										<div className="border-b border-[#3b3b3e]" />
+										<div className="border-b border-border" />
 										<div className="flex flex-col gap-2 p-3.5">
-											<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+											<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 												Layout
 											</span>
 											<div className="flex flex-col gap-1">
-												<p className="text-[10px] font-medium text-[#9a9a9d]">Dimensions</p>
+												<p className="text-[10px] font-medium text-muted-foreground">Dimensions</p>
 												<div className="flex w-full gap-2">
 													<NumberInput
 														value={layer.width}
@@ -272,14 +335,14 @@ const SideBars = ({
 									</>
 								)}
 
-								<div className="border-b border-[#3b3b3e]" />
+								<div className="border-b border-border" />
 								<div className="flex flex-col gap-2 p-3.5">
-									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 										Appearance
 									</span>
 									<div className="flex w-full gap-2">
 										<div className="flex w-1/2 flex-col gap-1">
-											<p className="text-[10px] font-medium text-[#9a9a9d]">Opacity</p>
+											<p className="text-[10px] font-medium text-muted-foreground">Opacity</p>
 											<NumberInput
 												value={layer.opacity}
 												min={0}
@@ -293,7 +356,7 @@ const SideBars = ({
 										</div>
 										{layer.type === LayerType.Rectangle && (
 											<div className="flex w-1/2 flex-col gap-1">
-												<p className="text-[10px] font-medium text-[#9a9a9d]">Corner radius</p>
+												<p className="text-[10px] font-medium text-muted-foreground">Corner radius</p>
 												<NumberInput
 													value={layer.cornerRadius ?? 0}
 													min={0}
@@ -308,9 +371,9 @@ const SideBars = ({
 										)}
 									</div>
 								</div>
-								<div className="border-b border-[#3b3b3e]" />
+								<div className="border-b border-border" />
 								<div className="flex flex-col gap-2 p-3.5">
-									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 										Fill
 									</span>
 									<ColorPicker
@@ -320,9 +383,9 @@ const SideBars = ({
 										}}
 									/>
 								</div>
-								<div className="border-b border-[#3b3b3e]" />
+								<div className="border-b border-border" />
 								<div className="flex flex-col gap-2 p-3.5">
-									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+									<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 										Stroke
 									</span>
 									<ColorPicker
@@ -334,9 +397,9 @@ const SideBars = ({
 								</div>
 								{layer.type === LayerType.Text && (
 									<>
-										<div className="border-b border-[#3b3b3e]" />
+										<div className="border-b border-border" />
 										<div className="flex flex-col gap-2 p-3.5">
-											<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+											<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 												Typography
 											</span>
 											<div className="flex flex-col gap-2">
@@ -349,7 +412,7 @@ const SideBars = ({
 												/>
 												<div className="flex w-full gap-2">
 													<div className="flex w-full flex-col gap-1">
-														<p className="text-[10px] font-medium text-[#9a9a9d]">Size</p>
+														<p className="text-[10px] font-medium text-muted-foreground">Size</p>
 														<NumberInput
 															value={layer.fontSize}
 															onChange={number => {
@@ -360,7 +423,7 @@ const SideBars = ({
 														/>
 													</div>
 													<div className="flex w-full flex-col gap-1">
-														<p className="text-[10px] font-medium text-[#9a9a9d]">Weight</p>
+														<p className="text-[10px] font-medium text-muted-foreground">Weight</p>
 														<Dropdown
 															value={layer.fontWeight.toString()}
 															onChange={value => {
@@ -387,9 +450,26 @@ const SideBars = ({
 							</>
 						) : (
 							<div className="flex flex-col gap-2 p-3.5">
-								<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-[#9a9a9d]">
+								<span className="mb-1 text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground">
 									Page
 								</span>
+								{canManageRoom && (
+									<div className="mb-1 flex items-center gap-2">
+										<button
+											type="button"
+											onClick={() =>
+												onVisibilityChange(
+													roomVisibility === RoomVisibility.PUBLIC
+														? RoomVisibility.PRIVATE
+														: RoomVisibility.PUBLIC,
+												)
+											}
+											className="inline-flex h-7 items-center gap-1 rounded-[0.45rem] border border-border bg-background px-2 text-[10px] text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+										>
+											{roomVisibility === RoomVisibility.PUBLIC ? 'Public' : 'Private'}
+										</button>
+									</div>
+								)}
 								<ColorPicker
 									onChange={color => {
 										const rgbColor = hexToRgb(color);
@@ -402,8 +482,8 @@ const SideBars = ({
 					</div>
 				</div>
 			) : (
-				<div className="pointer-events-none absolute right-0 top-0 z-10 p-2.5">
-					<div className="pointer-events-auto flex h-[44px] w-[272px] items-center justify-between rounded-[0.55rem] border border-[#3f3f42] bg-[#252527] pr-2 text-[#f4f4f5] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.72)] backdrop-blur-sm">
+				<div className="pointer-events-none absolute right-0 top-0 z-10">
+					<div className="pointer-events-auto flex h-[44px] w-[296px] items-center justify-between border-b border-l border-border bg-card pr-2 text-foreground">
 						<div className="max-36 flex w-full -space-x-2 overflow-x-auto p-2 text-xs">
 							{me && <UserAvatar color={connectionIdToColor(me.connectionId)} name={me.info.name} />}
 							{others.map(other => (
@@ -414,7 +494,15 @@ const SideBars = ({
 								/>
 							))}
 						</div>
-						<ShareMenu roomId={roomId} othersWithAccessToRoom={othersWithAccess} />
+						{canManageRoom && (
+							<ShareMenu
+								roomId={roomId}
+								roomName={roomName}
+								roomVisibility={roomVisibility}
+								owner={roomOwner}
+								othersWithAccessToRoom={othersWithAccess}
+							/>
+						)}
 					</div>
 				</div>
 			)}

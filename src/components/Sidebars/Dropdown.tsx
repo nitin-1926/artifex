@@ -28,7 +28,7 @@ const Dropdown = ({
 			<select
 				value={selectedValue}
 				onChange={handleChange}
-				className="figma-control w-full text-[11px] text-[#f4f4f5]"
+				className="figma-control w-full text-[11px] text-foreground"
 			>
 				{options.map(option => (
 					<option key={option} value={option}>
