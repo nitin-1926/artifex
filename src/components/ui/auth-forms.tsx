@@ -74,25 +74,22 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 	};
 
 	return (
-		<div className="relative mx-auto flex min-h-screen w-full items-center justify-center px-4 py-8 md:px-8">
-			<div className="bg-grid-mask pointer-events-none absolute inset-0 opacity-30" />
-			<div className="glass-panel noir-ring relative grid w-full max-w-5xl overflow-hidden rounded-[1.25rem]">
+		<div className="relative mx-auto flex w-full items-center justify-center">
+			<div className="relative grid w-full max-w-[980px] overflow-hidden rounded-[0.65rem] border border-white/10 bg-[#252527]">
 				<div className="absolute right-4 top-4 z-20">
 					<ThemeToggle />
 				</div>
-				<div className="grid lg:grid-cols-[1fr_460px]">
-					<div className="border-b border-border/70 bg-card/40 p-8 sm:p-10 lg:border-b-0 lg:border-r">
+				<div className="grid lg:grid-cols-[1fr_420px]">
+					<div className="border-b border-white/10 bg-[#2d2d2f] p-7 sm:p-8 lg:border-b-0 lg:border-r lg:border-white/10">
 						<div className="flex h-full flex-col justify-between gap-10">
 							<div className="space-y-4">
-								<p className="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-primary/80">
+								<p className="text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
 									{content.eyebrow}
 								</p>
-								<h1 className="max-w-xl text-3xl leading-tight text-foreground sm:text-4xl">
+								<h1 className="max-w-xl text-[28px] leading-tight text-[#f4f4f5] sm:text-[32px]">
 									{content.title}
 								</h1>
-								<p className="max-w-lg text-sm leading-7 text-muted-foreground">
-									{content.description}
-								</p>
+								<p className="max-w-lg text-[13px] leading-6 text-[#a1a1aa]">{content.description}</p>
 							</div>
 							<div className="grid gap-3 sm:grid-cols-3">
 								<StatPill label="Shared rooms" value="Team-ready" />
@@ -101,14 +98,16 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 							</div>
 						</div>
 					</div>
-					<div className="bg-background p-6 sm:p-8 lg:p-10">
+					<div className="bg-[#252527] p-6 sm:p-8 lg:p-9">
 						<div className="mx-auto max-w-md">
-							<div className="mb-8 space-y-3">
-								<p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+							<div className="mb-7 space-y-2.5">
+								<p className="text-[10px] uppercase tracking-[0.1em] text-[#9a9a9d]">
 									{isSignup ? 'New account' : 'Account access'}
 								</p>
-								<h2 className="text-2xl text-foreground">{isSignup ? 'Create account' : 'Sign in'}</h2>
-								<p className="text-sm leading-7 text-muted-foreground">
+								<h2 className="text-[22px] text-[#f4f4f5]">
+									{isSignup ? 'Create account' : 'Sign in'}
+								</h2>
+								<p className="text-[13px] leading-6 text-[#9a9a9d]">
 									{isSignup
 										? 'Use your email to create a workspace and start collaborating immediately.'
 										: 'Use your credentials to open your rooms and continue where you left off.'}
@@ -119,7 +118,7 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 								{isSignup && signUpFields()}
 								{signInFields()}
 								<button
-									className="group/btn relative block h-11 w-full overflow-hidden rounded-[0.9rem] bg-primary text-sm font-semibold text-primary-foreground transition duration-200 hover:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-70"
+									className="group/btn relative block h-9 w-full overflow-hidden rounded-[0.45rem] bg-[#3f70cb] text-[12px] font-medium text-white transition duration-200 hover:bg-[#4a79d0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d8dff]/40 disabled:cursor-not-allowed disabled:opacity-70"
 									type="submit"
 									disabled={isPending}
 								>
@@ -127,12 +126,12 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 									<BottomGradient />
 								</button>
 
-								<div className="h-px w-full bg-border/80" />
+								<div className="h-px w-full bg-white/10" />
 
-								<p className="text-center text-sm text-muted-foreground">
+								<p className="text-center text-[12px] text-[#9a9a9d]">
 									{content.switchCopy}
 									<Link
-										className="ml-2 font-semibold text-primary transition hover:text-foreground"
+										className="ml-2 font-medium text-[#8eb5ff] transition hover:text-[#bfd6ff]"
 										href={content.switchHref}
 									>
 										{content.switchLabel}
@@ -143,7 +142,7 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 									<p
 										role="alert"
 										aria-live="polite"
-										className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+										className="rounded-[0.45rem] border border-destructive/30 bg-destructive/10 px-3 py-2 text-[12px] text-destructive"
 									>
 										{errorMessage}
 									</p>
@@ -173,9 +172,9 @@ const LabelInputContainer = ({ children, className }: { children: React.ReactNod
 
 const StatPill = ({ label, value }: { label: string; value: string }) => {
 	return (
-		<div className="rounded-[0.95rem] border border-border/70 bg-background px-4 py-4">
-			<p className="text-[0.68rem] font-medium uppercase tracking-[0.22em] text-muted-foreground">{label}</p>
-			<p className="mt-2 text-sm font-semibold text-foreground">{value}</p>
+		<div className="rounded-[0.5rem] border border-white/10 bg-[#252527] px-3 py-3">
+			<p className="text-[10px] font-medium uppercase tracking-[0.09em] text-[#9a9a9d]">{label}</p>
+			<p className="mt-1.5 text-[12px] font-medium text-[#f4f4f5]">{value}</p>
 		</div>
 	);
 };

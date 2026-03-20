@@ -17,14 +17,14 @@ const Room = ({ children, roomId }: { children: React.ReactNode; roomId: string 
 					pencilDraft: null,
 				}}
 				initialStorage={{
-					roomColor: { r: 30, g: 30, b: 30 },
+					roomColor: { r: 236, g: 237, b: 240 },
 					layers: new LiveMap<string, LiveObject<Layer>>(),
 					layerIds: new LiveList([]),
 				}}
 			>
 				<ClientSideSuspense
 					fallback={
-						<div className="bg-grid-mask flex h-screen flex-col items-center justify-center gap-3 bg-slate-950 text-white">
+						<div className="flex h-screen flex-col items-center justify-center gap-3 bg-[#1f1f1f] text-white">
 							<Image
 								className="h-[50px] w-[50px] animate-bounce"
 								src="/artifex-logo.ico"
@@ -32,7 +32,7 @@ const Room = ({ children, roomId }: { children: React.ReactNode; roomId: string 
 								width={50}
 								height={50}
 							/>
-							<h1 className="animate-pulse text-sm font-normal tracking-[0.24em] text-slate-300 uppercase">
+							<h1 className="animate-pulse text-[11px] font-normal tracking-[0.18em] text-slate-300 uppercase">
 								Loading your artifact
 							</h1>
 						</div>

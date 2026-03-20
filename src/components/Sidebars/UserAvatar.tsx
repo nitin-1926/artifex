@@ -4,7 +4,7 @@ const UserAvatar = ({ name, color, className = '' }: { name: string; color?: str
 	return (
 		<div
 			className={cn(
-				'flex min-h-8 min-w-8 items-center justify-center rounded-full border border-white/80 text-[11px] font-semibold text-white shadow-[0_8px_18px_-14px_rgba(15,23,42,0.35)]',
+				'flex min-h-7 min-w-7 items-center justify-center rounded-full border border-white/30 text-[10px] font-medium text-white shadow-[0_6px_14px_-12px_rgba(0,0,0,0.55)]',
 				className,
 			)}
 			style={{ backgroundColor: color ? color : '#3b82f6' }}

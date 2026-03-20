@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
 import AuthForm from '~/components/ui/auth-forms';
-import { BackgroundBeamsWithCollision } from '~/components/ui/background-beams-with-collision';
 import { register } from '../actions/auth';
 
 const SignupPage = () => {
@@ -17,15 +16,8 @@ const SignupPage = () => {
 	}, [errorMessage, router]);
 
 	return (
-		<div className="flex min-h-screen items-center justify-center">
-			<BackgroundBeamsWithCollision>
-				<AuthForm
-					type="signup"
-					isPending={isPending}
-					errorMessage={errorMessage ?? ''}
-					formAction={formAction}
-				/>
-			</BackgroundBeamsWithCollision>
+		<div className="flex min-h-screen items-center justify-center bg-[#1f1f1f] p-4">
+			<AuthForm type="signup" isPending={isPending} errorMessage={errorMessage ?? ''} formAction={formAction} />
 		</div>
 	);
 };

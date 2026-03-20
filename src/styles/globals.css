@@ -4,54 +4,54 @@
 
 @layer base {
 	:root {
-		--background: 220 33% 98%;
-		--foreground: 222 32% 14%;
+		--background: 220 18% 97%;
+		--foreground: 222 20% 14%;
 		--card: 0 0% 100%;
-		--card-foreground: 222 32% 14%;
+		--card-foreground: 222 20% 14%;
 		--popover: 0 0% 100%;
-		--popover-foreground: 222 32% 14%;
-		--primary: 221 83% 53%;
+		--popover-foreground: 222 20% 14%;
+		--primary: 223 87% 56%;
 		--primary-foreground: 210 40% 98%;
-		--secondary: 220 20% 96%;
-		--secondary-foreground: 222 28% 18%;
-		--muted: 220 22% 95%;
-		--muted-foreground: 220 10% 40%;
-		--accent: 220 16% 92%;
-		--accent-foreground: 222 28% 18%;
+		--secondary: 220 15% 93%;
+		--secondary-foreground: 222 16% 22%;
+		--muted: 220 13% 92%;
+		--muted-foreground: 220 10% 43%;
+		--accent: 220 14% 89%;
+		--accent-foreground: 222 16% 22%;
 		--destructive: 0 84% 60%;
 		--destructive-foreground: 210 40% 98%;
-		--border: 220 18% 88%;
-		--input: 220 18% 88%;
-		--ring: 221 83% 53%;
-		--chart-1: 221 83% 53%;
+		--border: 220 12% 84%;
+		--input: 220 12% 84%;
+		--ring: 223 87% 56%;
+		--chart-1: 223 87% 56%;
 		--chart-2: 201 94% 46%;
 		--chart-3: 258 90% 66%;
 		--chart-4: 37 92% 50%;
 		--chart-5: 160 84% 39%;
-		--radius: 0.875rem;
+		--radius: 0.625rem;
 	}
 
 	.dark {
-		--background: 222 24% 10%;
-		--foreground: 220 20% 94%;
-		--card: 222 22% 12%;
-		--card-foreground: 220 20% 94%;
-		--popover: 222 22% 12%;
-		--popover-foreground: 220 20% 94%;
-		--primary: 217 91% 60%;
-		--primary-foreground: 222 24% 10%;
-		--secondary: 222 15% 16%;
-		--secondary-foreground: 220 20% 94%;
-		--muted: 223 14% 18%;
-		--muted-foreground: 220 12% 69%;
-		--accent: 223 14% 20%;
-		--accent-foreground: 220 20% 94%;
+		--background: 240 5% 11%;
+		--foreground: 220 15% 92%;
+		--card: 240 5% 14%;
+		--card-foreground: 220 15% 92%;
+		--popover: 240 5% 14%;
+		--popover-foreground: 220 15% 92%;
+		--primary: 223 87% 61%;
+		--primary-foreground: 240 5% 11%;
+		--secondary: 240 4% 19%;
+		--secondary-foreground: 220 15% 92%;
+		--muted: 240 4% 22%;
+		--muted-foreground: 220 11% 70%;
+		--accent: 240 4% 24%;
+		--accent-foreground: 220 15% 92%;
 		--destructive: 0 72% 52%;
 		--destructive-foreground: 220 33% 96%;
-		--border: 222 12% 24%;
-		--input: 222 12% 24%;
-		--ring: 217 91% 60%;
-		--chart-1: 217 91% 60%;
+		--border: 240 4% 27%;
+		--input: 240 4% 27%;
+		--ring: 223 87% 61%;
+		--chart-1: 223 87% 61%;
 		--chart-2: 201 94% 46%;
 		--chart-3: 258 90% 66%;
 		--chart-4: 37 92% 50%;
@@ -75,13 +75,9 @@
 
 	body {
 		@apply bg-background text-foreground font-body;
-		background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 1));
-		background-attachment: fixed;
+		font-size: 14px;
+		line-height: 1.45;
 		min-height: 100dvh;
-	}
-
-	.dark body {
-		background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 1));
 	}
 
 	h1,
@@ -90,7 +86,7 @@
 	h4,
 	h5,
 	h6 {
-		@apply font-display tracking-tight;
+		@apply font-body font-medium tracking-[-0.01em];
 	}
 
 	::selection {
@@ -99,15 +95,46 @@
 	}
 }
 
+@layer components {
+	.figma-surface {
+		@apply border border-border/90 bg-card;
+		box-shadow: 0 8px 22px -18px rgba(2, 6, 23, 0.4);
+	}
+
+	.dark .figma-surface {
+		box-shadow: 0 10px 26px -18px rgba(0, 0, 0, 0.6);
+	}
+
+	.figma-panel {
+		@apply figma-surface backdrop-blur-sm;
+	}
+
+	.figma-section-label {
+		@apply text-[10px] font-medium uppercase tracking-[0.11em] text-muted-foreground;
+	}
+
+	.figma-control {
+		@apply h-8 rounded-[0.5rem] border border-border/85 bg-background px-3 text-[12px] text-foreground outline-none transition;
+	}
+
+	.figma-control:hover {
+		@apply border-border;
+	}
+
+	.figma-control:focus-visible {
+		@apply border-primary/60 ring-2 ring-ring/30;
+	}
+}
+
 @layer utilities {
 	.bg-grid-mask {
-		background-image: linear-gradient(to right, hsl(var(--border) / 0.08) 1px, transparent 1px),
-			linear-gradient(to bottom, hsl(var(--border) / 0.08) 1px, transparent 1px);
-		background-size: 32px 32px;
+		background-image: linear-gradient(to right, hsl(var(--border) / 0.06) 1px, transparent 1px),
+			linear-gradient(to bottom, hsl(var(--border) / 0.06) 1px, transparent 1px);
+		background-size: 24px 24px;
 	}
 
 	.glass-panel {
-		@apply border border-border/80 bg-background/90 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.22)] backdrop-blur-md;
+		@apply figma-panel;
 	}
 
 	.noir-ring {

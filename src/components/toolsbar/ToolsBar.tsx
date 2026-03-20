@@ -32,8 +32,8 @@ const ToolsBar = ({
 	canRedo: boolean;
 }) => {
 	return (
-		<div className="pointer-events-none absolute bottom-3.5 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center">
-			<div className="pointer-events-auto flex items-center justify-center rounded-[0.8rem] border border-[#d7d8dc] bg-[#f7f7f8]/98 p-1 shadow-[0_14px_32px_-26px_rgba(15,23,42,0.35)] backdrop-blur-sm">
+		<div className="pointer-events-none absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center">
+			<div className="pointer-events-auto flex items-center justify-center rounded-[0.55rem] border border-border bg-card/95 p-1 shadow-[0_14px_32px_-26px_rgba(15,23,42,0.5)] backdrop-blur-sm">
 				<div className="flex items-center justify-center gap-2">
 					<SelectionButton
 						isActive={
@@ -74,12 +74,12 @@ const ToolsBar = ({
 							setCanvasStates({ mode: CanvasMode.Inserting, layerType: LayerType.Text });
 						}}
 					/>
-					<div className="w-px self-stretch bg-[#e4e4e7]" />
+					<div className="w-px self-stretch bg-border" />
 					<div className="flex items-center justify-center">
 						<UndoButton onClick={undo} disabled={!canUndo} />
 						<RedoButton onClick={redo} disabled={!canRedo} />
 					</div>
-					<div className="w-px self-stretch bg-[#e4e4e7]" />
+					<div className="w-px self-stretch bg-border" />
 					<div className="flex items-center justify-center">
 						<ZoomInButton onClick={zoomIn} disabled={!canZoomIn} />
 						<ZoomOutButton onClick={zoomOut} disabled={!canZoomOut} />

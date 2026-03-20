@@ -81,8 +81,15 @@ model Room {
     owner       User            @relation("RoomOwner", fields: [ownerId], references: [id])
     ownerId     String
     title       String          @default("Untitled")
+    description String          @default("Add a short description")
+    visibility  RoomVisibility  @default(PRIVATE)
+    archivedAt  DateTime?
     createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @default(now()) @updatedAt
     roomInvites RoomInvite[]
+
+    @@index([ownerId, archivedAt])
+    @@index([visibility, archivedAt])
 }
 
 model RoomInvite {
@@ -92,5 +99,11 @@ model RoomInvite {
     userId    String
     user      User        @relation(fields: [userId], references: [id])
 
+    @@unique([roomId, userId])
     @@index([roomId, userId])
+}
+
+enum RoomVisibility {
+    PRIVATE
+    PUBLIC
 }

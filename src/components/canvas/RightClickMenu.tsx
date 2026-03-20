@@ -59,23 +59,23 @@ const RightClickMenu = memo(({ camera }: { camera: Camera }) => {
 	return (
 		<div
 			style={{ transform: `translate(calc(${x}px - 50%), calc(${y - 16}px - 100%))` }}
-			className="pointer-events-auto absolute flex min-w-[168px] flex-col rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-1.5 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.32)]"
+			className="pointer-events-auto absolute flex min-w-[168px] flex-col rounded-[0.55rem] border border-[#3f3f42] bg-[#262628] p-1 shadow-[0_18px_36px_-28px_rgba(0,0,0,0.7)]"
 		>
 			<button
 				type="button"
 				onClick={bringToFront}
-				className="flex w-full items-center justify-center gap-2 rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6]"
+				className="flex w-full items-center justify-center gap-2 rounded-[0.45rem] px-2 py-1.5 text-[#d4d4d8] transition hover:bg-[#343436]"
 			>
-				<span className="text-xs">Bring to front</span>
-				<BsArrowDown className="mr-2 h-4 w-4" />
+				<span className="text-[11px]">Bring to front</span>
+				<BsArrowDown className="mr-2 h-3.5 w-3.5" />
 			</button>
 			<button
 				type="button"
 				onClick={sendToBack}
-				className="flex w-full items-center justify-center gap-2 rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6]"
+				className="flex w-full items-center justify-center gap-2 rounded-[0.45rem] px-2 py-1.5 text-[#d4d4d8] transition hover:bg-[#343436]"
 			>
-				<span className="text-xs">Send to back</span>
-				<BsArrowUp className="mr-2 h-4 w-4" />
+				<span className="text-[11px]">Send to back</span>
+				<BsArrowUp className="mr-2 h-3.5 w-3.5" />
 			</button>
 		</div>
 	);

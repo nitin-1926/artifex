@@ -42,58 +42,58 @@ const ShapeSelectionButton = ({
 				disabled={false}
 				label="Shape tools"
 			>
-				{canvasStates.mode !== CanvasMode.Inserting && <IoSquareOutline className="h-5 w-5" />}
+				{canvasStates.mode !== CanvasMode.Inserting && <IoSquareOutline className="h-4 w-4" />}
 				{canvasStates.mode === CanvasMode.Inserting &&
 					(canvasStates.layerType === LayerType.Rectangle || canvasStates.layerType === LayerType.Text) && (
-						<IoSquareOutline className="h-5 w-5" />
+						<IoSquareOutline className="h-4 w-4" />
 					)}
 				{canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Ellipse && (
-					<IoEllipseOutline className="h-5 w-5" />
+					<IoEllipseOutline className="h-4 w-4" />
 				)}
 			</IconButton>
 			<button
 				type="button"
 				aria-label="Open shape tool menu"
 				onClick={() => setIsOpen(!isOpen)}
-				className="ml-1 rotate-180 rounded-[0.5rem] p-1 text-[#6b7280] transition hover:bg-[#eceef2] hover:text-[#111827] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+				className="ml-1 rotate-180 rounded-[0.4rem] p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
 			>
-				<BiChevronDown className="h-5 w-5" />
+				<BiChevronDown className="h-4 w-4" />
 			</button>
 			{isOpen && (
-				<div className="absolute -top-24 z-20 mt-1 flex min-w-[170px] flex-col gap-1 rounded-[0.75rem] border border-[#d7d8dc] bg-[#ffffff] p-1.5 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.32)]">
+				<div className="absolute -top-24 z-20 mt-1 flex min-w-[164px] flex-col gap-1 rounded-[0.55rem] border border-border bg-card p-1 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.55)]">
 					<button
 						type="button"
 						onClick={() => handleClick(LayerType.Rectangle)}
-						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
+						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-foreground transition hover:bg-muted ${
 							canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Rectangle
-								? 'bg-[#eaf2ff] text-[#2563eb]'
+								? 'bg-primary/15 text-primary'
 								: ''
 						}`}
 					>
-						<span className="w-5 text-xs">
+						<span className="w-5 text-[10px]">
 							{canvasStates.mode === CanvasMode.Inserting &&
 								canvasStates.layerType === LayerType.Rectangle &&
 								'✓'}
 						</span>
 						<IoSquareOutline className="mr-2 h-4 w-4" />
-						<span className="text-xs">Rectangle</span>
+						<span className="text-[11px]">Rectangle</span>
 					</button>
 					<button
 						type="button"
 						onClick={() => handleClick(LayerType.Ellipse)}
-						className={`flex w-full items-center rounded-[0.6rem] px-2 py-2 text-[#374151] transition hover:bg-[#f3f4f6] ${
+						className={`flex w-full items-center rounded-[0.45rem] px-2 py-1.5 text-foreground transition hover:bg-muted ${
 							canvasStates.mode === CanvasMode.Inserting && canvasStates.layerType === LayerType.Ellipse
-								? 'bg-[#eaf2ff] text-[#2563eb]'
+								? 'bg-primary/15 text-primary'
 								: ''
 						}`}
 					>
-						<span className="w-5 text-xs">
+						<span className="w-5 text-[10px]">
 							{canvasStates.mode === CanvasMode.Inserting &&
 								canvasStates.layerType === LayerType.Ellipse &&
 								'✓'}
 						</span>
 						<IoEllipseOutline className="mr-2 h-4 w-4" />
-						<span className="text-xs">Ellipse</span>
+						<span className="text-[11px]">Ellipse</span>
 					</button>
 				</div>
 			)}

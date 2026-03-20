@@ -2,9 +2,10 @@
 
 import { LiveObject } from '@liveblocks/client';
 import { useCanRedo, useCanUndo, useHistory, useMutation, useSelf, useStorage } from '@liveblocks/react';
-import { type User } from '@prisma/client';
+import { RoomVisibility, type User } from '@prisma/client';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { updateRoomVisibility } from '~/app/actions/rooms';
 import useDeleteLayers from '~/hooks/useDeleteLayers';
 import {
 	type Camera,
@@ -41,10 +42,16 @@ const Canvas = ({
 	roomName,
 	roomId,
 	othersWithAccess,
+	roomOwner,
+	roomVisibility,
+	canManageRoom,
 }: {
 	roomName: string;
 	roomId: string;
 	othersWithAccess: User[];
+	roomOwner: Pick<User, 'id' | 'email' | 'name'>;
+	roomVisibility: RoomVisibility;
+	canManageRoom: boolean;
 }) => {
 	const roomColor = useStorage(storage => storage.roomColor);
 	const layerIds = useStorage(storage => storage.layerIds);
@@ -58,6 +65,8 @@ const Canvas = ({
 	const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: 1 });
 	const [isDragging, setIsDragging] = useState(false);
 	const [leftIsMinimized, setLeftIsMinimized] = useState(false);
+	const [roomVisibilityState, setRoomVisibilityState] = useState(roomVisibility);
+	const svgRef = useRef<SVGSVGElement>(null);
 
 	const insertLayer = useMutation(
 		(
@@ -359,7 +368,69 @@ const Canvas = ({
 			// TODO: Implement custom pencil cursor
 			return 'pencil';
 		}
+		return 'default';
 	};
+
+	const handleRoomVisibilityChange = useCallback(
+		async (nextVisibility: RoomVisibility) => {
+			setRoomVisibilityState(nextVisibility);
+			await updateRoomVisibility(roomId, nextVisibility);
+		},
+		[roomId],
+	);
+
+	const exportDesign = useCallback(
+		(format: 'png' | 'jpeg') => {
+			if (!svgRef.current) return;
+			const svgElement = svgRef.current;
+			const width = svgElement.clientWidth;
+			const height = svgElement.clientHeight;
+			if (!width || !height) return;
+
+			const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
+			clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+			clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+			clonedSvg.setAttribute('width', width.toString());
+			clonedSvg.setAttribute('height', height.toString());
+
+			const serialized = new XMLSerializer().serializeToString(clonedSvg);
+			const svgDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(serialized)}`;
+			const image = new window.Image();
+
+			image.onload = () => {
+				const canvas = document.createElement('canvas');
+				canvas.width = width;
+				canvas.height = height;
+				const context = canvas.getContext('2d');
+				if (!context) return;
+
+				if (format === 'jpeg') {
+					context.fillStyle = roomColor ? rgbToHex(roomColor) : '#ffffff';
+					context.fillRect(0, 0, width, height);
+				}
+				context.drawImage(image, 0, 0);
+
+				canvas.toBlob(
+					blob => {
+						if (!blob) return;
+						const downloadUrl = URL.createObjectURL(blob);
+						const anchor = document.createElement('a');
+						anchor.href = downloadUrl;
+						anchor.download = `${roomName.replace(/\s+/g, '_').toLowerCase() || 'design'}.${format}`;
+						document.body.appendChild(anchor);
+						anchor.click();
+						document.body.removeChild(anchor);
+						URL.revokeObjectURL(downloadUrl);
+					},
+					`image/${format}`,
+					0.95,
+				);
+			};
+
+			image.src = svgDataUrl;
+		},
+		[roomColor, roomName],
+	);
 
 	const selectAllLayers = useMutation(
 		({ setMyPresence }) => {
@@ -405,12 +476,13 @@ const Canvas = ({
 
 	return (
 		<div
-			style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#1e1e1e' }}
-			className={`relative h-screen w-full overflow-hidden bg-grid-mask touch-none cursor-${getCursor()}`}
+			style={{ backgroundColor: roomColor ? rgbToHex(roomColor) : '#eceef2' }}
+			className={`relative h-screen w-full overflow-hidden touch-none cursor-${getCursor()}`}
 		>
-			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.04),transparent_24%)]" />
+			<div className="pointer-events-none absolute inset-0 bg-grid-mask opacity-45" />
 			<main className="absolute inset-0">
 				<svg
+					ref={svgRef}
 					onWheel={handleWheel}
 					onPointerUp={handlePointerUp}
 					onPointerDown={handlePointerDown}
@@ -483,6 +555,11 @@ const Canvas = ({
 				roomId={roomId}
 				roomName={roomName}
 				othersWithAccess={othersWithAccess}
+				roomOwner={roomOwner}
+				roomVisibility={roomVisibilityState}
+				canManageRoom={canManageRoom}
+				onVisibilityChange={handleRoomVisibilityChange}
+				onExport={exportDesign}
 			/>
 		</div>
 	);
