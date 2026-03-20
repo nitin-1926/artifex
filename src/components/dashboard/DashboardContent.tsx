@@ -151,22 +151,35 @@ export async function DashboardContent({ section = 'recents' }: { section?: Dash
 
 	const sectionHeading =
 		section === 'community'
-			? { label: 'Community', title: 'Public design files', subtitle: 'Discover shared public designs from the workspace.' }
+			? {
+					label: 'Community',
+					title: 'Public design files',
+					subtitle: 'Discover shared public designs from the workspace.',
+				}
 			: section === 'archived'
-				? { label: 'Archived', title: 'Archived files', subtitle: 'Unarchive or permanently delete old designs.' }
-				: { label: 'Recents', title: 'Collaborative files', subtitle: 'Open recent rooms, organize drafts, and jump into the editor.' };
+				? {
+						label: 'Archived',
+						title: 'Archived files',
+						subtitle: 'Unarchive or permanently delete old designs.',
+					}
+				: {
+						label: 'Recents',
+						title: 'Collaborative files',
+						subtitle: 'Open recent rooms, organize drafts, and jump into the editor.',
+					};
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
-			<div className="mx-auto flex min-h-screen max-w-[1520px]">
+			<div className="mx-auto flex min-h-screen">
 				<aside className="hidden w-[244px] shrink-0 border-r border-border bg-card px-3 py-3 lg:flex lg:flex-col">
 					<div className="mb-3 rounded-[0.6rem] border border-border bg-background p-3">
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-2">
-								<Image src="/artifex-logo.ico" alt="Artifex logo" width={16} height={16} />
+								<Image src="/artifex-logo.ico" alt="Artifex logo" width={40} height={40} />
 								<div>
-									<p className="text-[10px] uppercase tracking-[0.09em] text-muted-foreground">Artifex</p>
-									<h1 className="mt-1 text-[13px] font-medium text-foreground">Workspace</h1>
+									<p className="text-[10px] uppercase tracking-[0.09em] text-muted-foreground">
+										Artifex
+									</p>
 								</div>
 							</div>
 							<ThemeToggle />

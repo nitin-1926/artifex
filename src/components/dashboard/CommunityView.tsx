@@ -63,8 +63,12 @@ const CommunityView = ({ rooms, currentUserId }: { rooms: RoomCardData[]; curren
 										<ArrowUpRight className="h-3.5 w-3.5" />
 									</button>
 								</div>
-								<h3 className="mt-3 line-clamp-2 text-[20px] leading-tight text-foreground">{room.title}</h3>
-								<p className="mt-2 line-clamp-2 text-[12px] text-muted-foreground">{room.description}</p>
+								<h3 className="mt-3 line-clamp-2 text-[20px] leading-tight text-foreground">
+									{room.title}
+								</h3>
+								<p className="mt-2 line-clamp-2 text-[12px] text-muted-foreground">
+									{room.description}
+								</p>
 							</div>
 							<div className="mt-2 text-[11px] text-muted-foreground">
 								By {room.owner.email} {room.ownerId === currentUserId ? '(you)' : ''}

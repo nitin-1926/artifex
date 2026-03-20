@@ -64,11 +64,7 @@ export async function POST(request: Request) {
 				archivedAt: true,
 			},
 		});
-		if (
-			publicRoom &&
-			publicRoom.visibility === RoomVisibility.PUBLIC &&
-			publicRoom.archivedAt === null
-		) {
+		if (publicRoom && publicRoom.visibility === RoomVisibility.PUBLIC && publicRoom.archivedAt === null) {
 			session.allow(`room:${publicRoom.id}`, session.FULL_ACCESS);
 		}
 	}

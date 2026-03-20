@@ -89,9 +89,7 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 								<h1 className="max-w-xl text-[28px] leading-tight text-[#f4f4f5] sm:text-[32px]">
 									{content.title}
 								</h1>
-								<p className="max-w-lg text-[13px] leading-6 text-[#a1a1aa]">
-									{content.description}
-								</p>
+								<p className="max-w-lg text-[13px] leading-6 text-[#a1a1aa]">{content.description}</p>
 							</div>
 							<div className="grid gap-3 sm:grid-cols-3">
 								<StatPill label="Shared rooms" value="Team-ready" />
@@ -106,7 +104,9 @@ const AuthForm = ({ type, isPending, errorMessage, formAction }: AuthFormProps) 
 								<p className="text-[10px] uppercase tracking-[0.1em] text-[#9a9a9d]">
 									{isSignup ? 'New account' : 'Account access'}
 								</p>
-								<h2 className="text-[22px] text-[#f4f4f5]">{isSignup ? 'Create account' : 'Sign in'}</h2>
+								<h2 className="text-[22px] text-[#f4f4f5]">
+									{isSignup ? 'Create account' : 'Sign in'}
+								</h2>
 								<p className="text-[13px] leading-6 text-[#9a9a9d]">
 									{isSignup
 										? 'Use your email to create a workspace and start collaborating immediately.'

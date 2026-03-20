@@ -14,9 +14,7 @@ const ConfirmationModal = ({
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-md">
 			<div className="w-full max-w-md rounded-[0.65rem] border border-white/10 bg-[#252527] p-5 text-[#f4f4f5]">
-				<p className="text-[10px] font-medium uppercase tracking-[0.1em] text-destructive/90">
-					Confirm action
-				</p>
+				<p className="text-[10px] font-medium uppercase tracking-[0.1em] text-destructive/90">Confirm action</p>
 				<h2 className="mt-3 text-[22px]">Delete room?</h2>
 				<p className="mt-2 text-[12px] leading-6 text-[#9a9a9d]">{message}</p>
 				<div className="mt-6 flex justify-end gap-2 text-sm">

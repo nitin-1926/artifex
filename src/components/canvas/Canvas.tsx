@@ -410,17 +410,21 @@ const Canvas = ({
 				}
 				context.drawImage(image, 0, 0);
 
-				canvas.toBlob(blob => {
-					if (!blob) return;
-					const downloadUrl = URL.createObjectURL(blob);
-					const anchor = document.createElement('a');
-					anchor.href = downloadUrl;
-					anchor.download = `${roomName.replace(/\s+/g, '_').toLowerCase() || 'design'}.${format}`;
-					document.body.appendChild(anchor);
-					anchor.click();
-					document.body.removeChild(anchor);
-					URL.revokeObjectURL(downloadUrl);
-				}, `image/${format}`, 0.95);
+				canvas.toBlob(
+					blob => {
+						if (!blob) return;
+						const downloadUrl = URL.createObjectURL(blob);
+						const anchor = document.createElement('a');
+						anchor.href = downloadUrl;
+						anchor.download = `${roomName.replace(/\s+/g, '_').toLowerCase() || 'design'}.${format}`;
+						document.body.appendChild(anchor);
+						anchor.click();
+						document.body.removeChild(anchor);
+						URL.revokeObjectURL(downloadUrl);
+					},
+					`image/${format}`,
+					0.95,
+				);
 			};
 
 			image.src = svgDataUrl;

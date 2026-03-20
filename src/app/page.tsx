@@ -77,7 +77,12 @@ export default async function HomePage() {
 						</Link>
 					</div>
 					<div className="mt-8 grid gap-2 sm:grid-cols-2">
-						{['Dark-first UI system', 'Theme tokens for all surfaces', 'Room sharing and invites', 'Live layer editing'].map(item => (
+						{[
+							'Dark-first UI system',
+							'Theme tokens for all surfaces',
+							'Room sharing and invites',
+							'Live layer editing',
+						].map(item => (
 							<div
 								key={item}
 								className="flex items-center gap-2 rounded-[0.5rem] border border-white/10 bg-[#2b2b2d] px-3 py-2 text-[12px] text-[#d4d4d8]"
@@ -93,17 +98,24 @@ export default async function HomePage() {
 					<div className="rounded-[0.5rem] border border-white/10 bg-[#2e2e30] p-3">
 						<div className="flex items-center justify-between border-b border-white/10 pb-2">
 							<p className="text-[10px] uppercase tracking-[0.1em] text-[#9a9a9d]">Workspace preview</p>
-							<span className="rounded-[0.4rem] bg-[#3a3a3a] px-2 py-0.5 text-[10px] text-[#c7c7cb]">Recents</span>
+							<span className="rounded-[0.4rem] bg-[#3a3a3a] px-2 py-0.5 text-[10px] text-[#c7c7cb]">
+								Recents
+							</span>
 						</div>
 						<div className="mt-3 grid grid-cols-2 gap-2">
-							{['Agentic workflow', 'Milestones 2025', 'Template variations', 'Design handoff'].map(file => (
-								<div key={file} className="overflow-hidden rounded-[0.45rem] border border-white/10 bg-[#242425]">
-									<div className="h-16 bg-[#dfe5f0]" />
-									<div className="border-t border-white/10 px-2.5 py-2">
-										<p className="truncate text-[11px] text-[#f4f4f5]">{file}</p>
+							{['Agentic workflow', 'Milestones 2025', 'Template variations', 'Design handoff'].map(
+								file => (
+									<div
+										key={file}
+										className="overflow-hidden rounded-[0.45rem] border border-white/10 bg-[#242425]"
+									>
+										<div className="h-16 bg-[#dfe5f0]" />
+										<div className="border-t border-white/10 px-2.5 py-2">
+											<p className="truncate text-[11px] text-[#f4f4f5]">{file}</p>
+										</div>
 									</div>
-								</div>
-							))}
+								),
+							)}
 						</div>
 					</div>
 				</section>
@@ -114,7 +126,10 @@ export default async function HomePage() {
 					{FEATURES.map(feature => {
 						const Icon = feature.icon;
 						return (
-							<div key={feature.title} className="rounded-[0.55rem] border border-white/10 bg-[#2a2a2b] p-4">
+							<div
+								key={feature.title}
+								className="rounded-[0.55rem] border border-white/10 bg-[#2a2a2b] p-4"
+							>
 								<div className="flex h-7 w-7 items-center justify-center rounded-[0.45rem] bg-[#353538] text-[#bad0ff]">
 									<Icon className="h-4 w-4" />
 								</div>

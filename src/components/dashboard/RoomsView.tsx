@@ -1,7 +1,17 @@
 'use client';
 
 import { RoomVisibility } from '@prisma/client';
-import { ArchiveRestore, ArrowUpRight, Clock3, FolderKanban, Globe2, Layers3, Lock, Trash2 } from 'lucide-react';
+import {
+	ArchiveRestore,
+	ArrowUpRight,
+	Clock3,
+	FolderKanban,
+	Globe2,
+	Layers3,
+	Lock,
+	Trash2,
+	Share2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -215,12 +225,18 @@ const SingleRoom = ({
 							onClick={() =>
 								updateRoomVisibility(
 									id,
-									visibility === RoomVisibility.PUBLIC ? RoomVisibility.PRIVATE : RoomVisibility.PUBLIC,
+									visibility === RoomVisibility.PUBLIC
+										? RoomVisibility.PRIVATE
+										: RoomVisibility.PUBLIC,
 								)
 							}
 							className="inline-flex h-7 items-center gap-1 rounded-[0.45rem] border border-border bg-card px-2 text-[10px] text-muted-foreground transition hover:border-primary/50 hover:text-primary"
 						>
-							{visibility === RoomVisibility.PUBLIC ? <Globe2 className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+							{visibility === RoomVisibility.PUBLIC ? (
+								<Globe2 className="h-3 w-3" />
+							) : (
+								<Lock className="h-3 w-3" />
+							)}
 							{visibility === RoomVisibility.PUBLIC ? 'Public' : 'Private'}
 						</button>
 					)}
@@ -231,7 +247,7 @@ const SingleRoom = ({
 							roomVisibility={visibility}
 							owner={owner}
 							othersWithAccessToRoom={collaborators}
-							triggerLabel="↗"
+							triggerLabel={<Share2 className="h-3.5 w-3.5" />}
 							triggerClassName="inline-flex h-7 w-7 items-center justify-center rounded-[0.45rem] border border-border bg-card text-muted-foreground transition hover:border-primary/50 hover:text-primary"
 						/>
 					)}
@@ -360,22 +376,20 @@ const RoomsView = ({
 			</div>
 			{filteredRooms.length === 0 ? (
 				<div className="rounded-[0.6rem] border border-border bg-card px-6 py-10 text-center">
-					<p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
-						No rooms yet
-					</p>
+					<p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground">No rooms yet</p>
 					<h3 className="mt-2 text-[18px] text-foreground">
 						{mode === 'archived'
 							? 'Nothing archived yet.'
 							: viewMode === 'owns'
-							? 'Start your first design room.'
-							: 'Nothing has been shared with you yet.'}
+								? 'Start your first design room.'
+								: 'Nothing has been shared with you yet.'}
 					</h3>
 					<p className="mx-auto mt-2 max-w-lg text-[12px] leading-6 text-muted-foreground">
 						{mode === 'archived'
 							? 'Archived files will appear here. You can restore or permanently delete them.'
 							: viewMode === 'owns'
-							? 'Use the call-to-action above to create a fresh workspace and begin shaping your next artifact.'
-							: 'Once a teammate invites you into a room, it will appear here with the same live collaboration experience.'}
+								? 'Use the call-to-action above to create a fresh workspace and begin shaping your next artifact.'
+								: 'Once a teammate invites you into a room, it will appear here with the same live collaboration experience.'}
 					</p>
 				</div>
 			) : (

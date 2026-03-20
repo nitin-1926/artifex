@@ -19,8 +19,7 @@ import NumberInput from './NumberInput';
 import UserAvatar from './UserAvatar';
 import ShareMenu from './ShareMenu';
 
-const PANEL_CLASS =
-	'pointer-events-auto flex h-full flex-col border border-border bg-card text-foreground';
+const PANEL_CLASS = 'pointer-events-auto flex h-full flex-col border border-border bg-card text-foreground';
 
 const SideBars = ({
 	leftIsMinimized,
@@ -311,7 +310,9 @@ const SideBars = ({
 												Layout
 											</span>
 											<div className="flex flex-col gap-1">
-												<p className="text-[10px] font-medium text-muted-foreground">Dimensions</p>
+												<p className="text-[10px] font-medium text-muted-foreground">
+													Dimensions
+												</p>
 												<div className="flex w-full gap-2">
 													<NumberInput
 														value={layer.width}
@@ -356,7 +357,9 @@ const SideBars = ({
 										</div>
 										{layer.type === LayerType.Rectangle && (
 											<div className="flex w-1/2 flex-col gap-1">
-												<p className="text-[10px] font-medium text-muted-foreground">Corner radius</p>
+												<p className="text-[10px] font-medium text-muted-foreground">
+													Corner radius
+												</p>
 												<NumberInput
 													value={layer.cornerRadius ?? 0}
 													min={0}
@@ -412,7 +415,9 @@ const SideBars = ({
 												/>
 												<div className="flex w-full gap-2">
 													<div className="flex w-full flex-col gap-1">
-														<p className="text-[10px] font-medium text-muted-foreground">Size</p>
+														<p className="text-[10px] font-medium text-muted-foreground">
+															Size
+														</p>
 														<NumberInput
 															value={layer.fontSize}
 															onChange={number => {
@@ -423,7 +428,9 @@ const SideBars = ({
 														/>
 													</div>
 													<div className="flex w-full flex-col gap-1">
-														<p className="text-[10px] font-medium text-muted-foreground">Weight</p>
+														<p className="text-[10px] font-medium text-muted-foreground">
+															Weight
+														</p>
 														<Dropdown
 															value={layer.fontWeight.toString()}
 															onChange={value => {

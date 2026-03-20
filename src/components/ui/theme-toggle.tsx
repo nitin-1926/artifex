@@ -18,10 +18,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 		return (
 			<div
 				aria-hidden="true"
-				className={cn(
-					'h-8 w-8 rounded-[0.55rem] border border-border/80 bg-card/85 backdrop-blur',
-					className,
-				)}
+				className={cn('h-8 w-8 rounded-[0.55rem] border border-border/80 bg-card/85 backdrop-blur', className)}
 			/>
 		);
 	}

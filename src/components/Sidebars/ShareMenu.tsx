@@ -18,7 +18,7 @@ const ShareMenu = ({
 	owner: Pick<User, 'id' | 'name' | 'email'>;
 	roomVisibility: RoomVisibility;
 	othersWithAccessToRoom: Array<Pick<User, 'id' | 'name' | 'email'>>;
-	triggerLabel?: string;
+	triggerLabel?: React.ReactNode;
 	triggerClassName?: string;
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,9 @@ const ShareMenu = ({
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/35 p-4 backdrop-blur-sm">
 					<div className="flex w-full max-w-[450px] flex-col overflow-hidden rounded-[0.65rem] border border-border bg-card shadow-[0_30px_80px_-36px_rgba(15,23,42,0.65)]">
 						<div className="flex items-center justify-between border-b border-border px-4 py-3">
-							<p className="truncate pr-3 text-[12px] font-medium text-foreground">Share this file · {roomName}</p>
+							<p className="truncate pr-3 text-[12px] font-medium text-foreground">
+								Share this file · {roomName}
+							</p>
 							<div className="flex items-center gap-2">
 								<button
 									type="button"
